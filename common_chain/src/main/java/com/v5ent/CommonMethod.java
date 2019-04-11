@@ -20,6 +20,7 @@ import com.google.gson.GsonBuilder;
 import com.v5ent.entity.Block;
 import com.v5ent.entity.Message;
 
+import net.matthew.Static_Value;
 import spark.Request;
 import spark.Response;
 import spark.Route;
@@ -108,14 +109,14 @@ public class CommonMethod {
 		/**
 		 * get /
 		 */
-		get("/", new Route() {
+		get(Static_Value.ABS_GET_DEFAULT_METHOD, new Route() {
 			@Override
 			public Object handle(Request request, Response response) throws Exception {
 				response.header("content-type","application/json");
 				return gson.toJson(blockChain);
 			}
 		}); 
-		get("/all", new Route() {
+		get(Static_Value.ABS_GET_ALL_METHOD, new Route() {
 			@Override
 			public Object handle(Request request, Response response) throws Exception {
 				response.header("content-type","application/json");
@@ -123,14 +124,14 @@ public class CommonMethod {
 			}
 		}); 
 		
-		get("/getlast", new Route() {
+		get(Static_Value.ABS_GET_LAST_METHOD, new Route() {
 			@Override
 			public Object handle(Request request, Response response) throws Exception {
 				response.header("content-type","application/json");
 				return gson.toJson(blockChain.get(blockChain.size()-1));
 			}
 		}); 
-		get("/getbyindex/:index", new Route() {
+		get(Static_Value.ABS_GET_BY_INDEX_METHOD+":index", new Route() {
 			@Override
 			public Object handle(Request request, Response response) throws Exception {
 				response.header("content-type","application/json");
@@ -153,7 +154,7 @@ public class CommonMethod {
 		/***
 		 * post / {"vac":75}
 		 */
-		post("/", new Route() {
+		post(Static_Value.ABS_DEFAULT_POST_METHOD, new Route() {
 			@Override
 			public Object handle(Request request, Response response) throws Exception {
 					response.header("content-type","application/json");
