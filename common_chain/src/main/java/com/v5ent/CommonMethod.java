@@ -109,14 +109,14 @@ public class CommonMethod {
 		/**
 		 * get /
 		 */
-		get(Static_Value.ABS_GET_DEFAULT_METHOD, new Route() {
+		get("/"+Static_Value.ABS_GET_DEFAULT_METHOD, new Route() {
 			@Override
 			public Object handle(Request request, Response response) throws Exception {
 				response.header("content-type","application/json");
 				return gson.toJson(blockChain);
 			}
 		}); 
-		get(Static_Value.ABS_GET_ALL_METHOD, new Route() {
+		get("/"+Static_Value.ABS_GET_ALL_METHOD, new Route() {
 			@Override
 			public Object handle(Request request, Response response) throws Exception {
 				response.header("content-type","application/json");
@@ -124,14 +124,14 @@ public class CommonMethod {
 			}
 		}); 
 		
-		get(Static_Value.ABS_GET_LAST_METHOD, new Route() {
+		get("/"+Static_Value.ABS_GET_LAST_METHOD, new Route() {
 			@Override
 			public Object handle(Request request, Response response) throws Exception {
 				response.header("content-type","application/json");
 				return gson.toJson(blockChain.get(blockChain.size()-1));
 			}
 		}); 
-		get(Static_Value.ABS_GET_BY_INDEX_METHOD+":index", new Route() {
+		get("/"+Static_Value.ABS_GET_BY_INDEX_METHOD+":index", new Route() {
 			@Override
 			public Object handle(Request request, Response response) throws Exception {
 				response.header("content-type","application/json");
@@ -154,7 +154,7 @@ public class CommonMethod {
 		/***
 		 * post / {"vac":75}
 		 */
-		post(Static_Value.ABS_DEFAULT_POST_METHOD, new Route() {
+		post("/"+Static_Value.ABS_DEFAULT_POST_METHOD, new Route() {
 			@Override
 			public Object handle(Request request, Response response) throws Exception {
 					response.header("content-type","application/json");

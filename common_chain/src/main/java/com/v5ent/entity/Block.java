@@ -1,4 +1,9 @@
 package com.v5ent.entity;
+
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+
 /**
  * 区块
  */
@@ -16,7 +21,12 @@ public class Block {
 	
 	private int difficulty;
 	private String nonce;
-	
+	/**For illegalContent**/
+	private String comments;
+	/**For update user**/
+	private String user;
+	/**for error Block**/
+	private static Block block=new Block();
 	/** getters and setters**/
 	public int getIndex() {
 		return index;
@@ -115,6 +125,19 @@ public class Block {
 		if (vac != other.vac)
 			return false;
 		return true;
+	}
+	public static Block createErrorBlock() {
+		block.setVac("Error Block");
+		block.setIndex(-1);
+		block.setHash("Error");
+		block.setTimestamp(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+		return block;
+	}
+	public String getComments() {
+		return comments;
+	}
+	public void setComments(String comments) {
+		this.comments = comments;
 	}
 	
 }
