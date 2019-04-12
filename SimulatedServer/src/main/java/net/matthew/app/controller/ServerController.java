@@ -1,6 +1,8 @@
 package net.matthew.app.controller;
 
 import java.io.IOException;
+import java.util.LinkedList;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -43,7 +45,23 @@ public class ServerController {
 
 	@RequestMapping("/getAll")
 	@ResponseBody
-	String getLastBlock() {
+	String getAllBlock(HttpServletRequest request) {
+		String user = request.getParameter("user");
+		String type = request.getParameter("type");
+		String url=Static_Value.ABS_A_MASTER_CHAIN_DOMAIN;
+		int port = Static_Value.ABS_A_MASTER_CHAIN_PORT;
+		if(type!=null&&Static_Value.TYPE_CAPITAL.equals(type)) {
+			url=Static_Value.ABS_A_CAPITAL_CHAIN_DOMAIN;
+			port=Static_Value.ABS_A_CAPITAL_CHAIN_PORT;
+		}
+		if(type!=null&&Static_Value.TYPE_REPUTATION.equals(type)) {
+			url=Static_Value.ABS_A_REPUTATION_CHAIN_DOMAIN;
+			port=Static_Value.ABS_A_REPUTATIONL_CHAIN_PORT;
+		}
+		if(type!=null&&Static_Value.TYPE_VALUE.equals(type)) {
+			url=Static_Value.ABS_A_VALUE_CHAIN_DOMAIN;
+			port=Static_Value.ABS_A_VALUE_CHAIN_PORT;
+		}
 		return "get";
 
 	}
@@ -148,7 +166,29 @@ public class ServerController {
 		}
 
 	}
+	List<Block> getAllValue(String url, int port, String method, boolean isAdmin) {
+		HttpGet httpGet = new HttpGet(url + ":" + port + "/" + method);
+		try {
+			HttpResponse response = client.execute(httpGet);
+			response.addHeader("content-type", "application/json");
+			HttpEntity entity = response.getEntity();
+			String string = EntityUtils.toString(entity);
+			List<Block> returnChain = gson.fromJson(string, List.class);
+			boolean illegalContent = false;
+			int index = -1;
+			String hash = "";
 
+			return returnChain;
+		} catch (ClientProtocolException e) {
+			e.printStackTrace();
+			return new LinkedList<Block>();
+		} catch (IOException e) {
+			e.printStackTrace();
+			return new LinkedList<Block>();
+		} finally {
+			httpGet.releaseConnection();
+		}
+	}
 	Block getPostValue(String url, int port, String method, String vac, String name) {
 		HttpPost httpPost = new HttpPost(url + ":" + port + "/" + method);
 		JSONObject jsonParam = new JSONObject();
