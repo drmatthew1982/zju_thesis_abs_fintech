@@ -2,11 +2,11 @@
 <html>
 <head>
 <meta charset="UTF-8" />
-<title>Client Page</title>
+<title>Admin Page</title>
 
 </head>
 <body>
-	<h1>Client Page</h1>
+	<h1>Admin Page</h1>
 	<table border="1">
 		<tr>
 			<th>Chain Name</th>
@@ -24,7 +24,7 @@
 			<td><span th:text="${returnObject.capital.hash}"></span></td>
 			<td><span th:text="${returnObject.capital.timestamp}"></span></td>
 			<td><span th:text="${returnObject.capital.comments}"></span></td>
-			<td><a href="">View Detail</a></td>
+			<td><a href="javascript:document.capitalChianForm.submit();">View Detail</a></td>
 		</tr>
 		<tr>
 			<td>Reputation Chain</td>
@@ -33,7 +33,7 @@
 			<td><span th:text="${returnObject.reputation.hash}"></span></td>
 			<td><span th:text="${returnObject.reputation.timestamp}"></span></td>
 			<td><span th:text="${returnObject.reputation.comments}"></span></td>
-			<td><a href="">View Detail</a></td>
+			<td><a href="adminview">View Detail</a></td>
 		</tr>
 		<tr>
 			<td>Value Chain</td>
@@ -42,11 +42,21 @@
 			<td><span th:text="${returnObject.value.hash}"></span></td>
 			<td><span th:text="${returnObject.value.timestamp}"></span></td>
 			<td><span th:text="${returnObject.value.comments}"></span></td>
-			<td><a href="">Value Detail</a></td>
+			<td><a href="adminview">Value Detail</a></td>
 		</tr>
 	</table>
 	
-	
-	
+    <form name='capitalChianForm' action='adminview' method='post'>      
+    	<input type='hidden' name='user' value='admin'/>  
+    	<input type='hidden' name='type' value='capital'/> 
+    </form>
+    <form name='reputationChianForm' action='adminview' method='post'>      
+    	<input type='hidden' name='user' value='admin'/>  
+    	<input type='hidden' name='type' value='reputation'/> 
+    </form>
+    <form name='valueChianForm' action='adminview' method='post'>      
+    	<input type='hidden' name='user' value='admin'/>  
+    	<input type='hidden' name='type' value='value'/> 
+    </form>  	
 </body>
 </html>
