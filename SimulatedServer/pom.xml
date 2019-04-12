@@ -41,7 +41,7 @@
         </dependency>
         <dependency>
 			<groupId>com.v5ent</groupId>
-			<artifactId>commonchian</artifactId>
+			<artifactId>commonchain</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
         <dependency>

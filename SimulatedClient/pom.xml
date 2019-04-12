@@ -39,6 +39,11 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-thymeleaf</artifactId>
         </dependency>
+         <dependency>
+			<groupId>com.v5ent</groupId>
+			<artifactId>commonchain</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
         <dependency>
 			<groupId>blockchainutil</groupId>
 			<artifactId>blockchainutil</artifactId>
