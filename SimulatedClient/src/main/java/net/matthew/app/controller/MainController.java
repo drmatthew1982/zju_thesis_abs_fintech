@@ -22,9 +22,11 @@ public class MainController {
 	  public static String API_URL = "http://localhost:8080/getlatest";
 	  private static DefaultHttpClient client = new DefaultHttpClient();
 	  final Gson gson = new GsonBuilder().setPrettyPrinting().create();
-      @RequestMapping("/")
+	  ModelAndView errorModelAndView = new ModelAndView();
+	  
+	  @RequestMapping("/")
       @ResponseBody
-      String home() {
+      ModelAndView home() {
     	HttpGet httpGet = new HttpGet(API_URL);
     	HttpResponse response;
 		try {
@@ -32,19 +34,24 @@ public class MainController {
 			response.addHeader("content-type","application/json");
 			HttpEntity entity = response.getEntity();
 			String string = EntityUtils.toString(entity);
-			gson.fromJson(string, ReturnLatest.class);
+			ReturnLatest returnObject=gson.fromJson(string, ReturnLatest.class);
 			ModelAndView modelAndView = new ModelAndView();
-	        modelAndView.setViewName("index");
-	        modelAndView.addObject("key", 12345);
-	        return string;
+	        modelAndView.setViewName("/index");
+	        modelAndView.addObject("returnObject", returnObject);
+	        return modelAndView;
 		} catch (ClientProtocolException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			return "error";
+			
+			errorModelAndView.setViewName("error");
+	       
+	        return errorModelAndView;
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			return "error";
+			errorModelAndView.setViewName("error");
+		       
+	        return errorModelAndView;
 		}
 		
       }
