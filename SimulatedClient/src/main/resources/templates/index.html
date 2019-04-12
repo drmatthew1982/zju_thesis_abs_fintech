@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8" />
+<title>Client Page</title>
+
+</head>
+<body>
+	<h1>Client Page</h1>
+	<table border="1">
+		<tr>
+			<th>Chain Name</th>
+			<th>Capital</th>
+			<th>Content</th>
+			<th>hash</th>
+			<th>Updated Timep</th>
+			<th>Comment</th>
+			<th>View Detail</th>
+		</tr>
+		<tr>
+			<td>Capital Chain</td>
+			<td><span th:text="${returnObject.capital.index}"></span></td>
+			<td><span th:text="${returnObject.capital.vac}"></span></td>
+			<td><span th:text="${returnObject.capital.hash}"></span></td>
+			<td><span th:text="${returnObject.capital.timestamp}"></span></td>
+			<td><span th:text="${returnObject.capital.comments}"></span></td>
+			<td><a href="">View Detail</a></td>
+		</tr>
+		<tr>
+			<td>Reputation Chain</td>
+			<td><span th:text="${returnObject.reputation.index}"></span></td>
+			<td><span th:text="${returnObject.reputation.vac}"></span></td>
+			<td><span th:text="${returnObject.reputation.hash}"></span></td>
+			<td><span th:text="${returnObject.reputation.timestamp}"></span></td>
+			<td><span th:text="${returnObject.reputation.comments}"></span></td>
+			<td><a href="">View Detail</a></td>
+		</tr>
+		<tr>
+			<td>Value Chain</td>
+			<td><span th:text="${returnObject.value.index}"></span></td>
+			<td><span th:text="${returnObject.value.vac}"></span></td>
+			<td><span th:text="${returnObject.value.hash}"></span></td>
+			<td><span th:text="${returnObject.value.timestamp}"></span></td>
+			<td><span th:text="${returnObject.value.comments}"></span></td>
+			<td><a href="">Value Detail</a></td>
+		</tr>
+	</table>
+	
+	
+	
+</body>
+</html>
