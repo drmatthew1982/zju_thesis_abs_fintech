@@ -50,11 +50,21 @@ public class CommonMethod {
 	 * @param vac
 	 * @return
 	 */
-	public static Block generateBlock(Block oldBlock, String vac) {
+	public static Block generateBlock(Block oldBlock, String vac,String user,String comments) {
 		Block newBlock = new Block();
 		newBlock.setIndex(oldBlock.getIndex() + 1);
 		newBlock.setTimestamp(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
 		newBlock.setVac(vac);
+		if(user!=null) {
+			newBlock.setUser(user);
+		}else {
+			newBlock.setUser("anonymous");
+		}
+		if(comments!=null) {
+			newBlock.setComments(comments);
+		}else {
+			newBlock.setComments("");
+		}
 		newBlock.setPrevHash(oldBlock.getHash());
 		newBlock.setHash(calculateHash(newBlock));
 		return newBlock;
@@ -102,6 +112,8 @@ public class CommonMethod {
 		genesisBlock.setTimestamp(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
 		genesisBlock.setVac("0");
 		genesisBlock.setPrevHash("");
+		genesisBlock.setUser("SYSTEM");
+		genesisBlock.setComments("Genesis Block");
 		genesisBlock.setHash(calculateHash(genesisBlock));
 		blockChain.add(genesisBlock);
 
@@ -120,6 +132,7 @@ public class CommonMethod {
 			@Override
 			public Object handle(Request request, Response response) throws Exception {
 				response.header("content-type","application/json");
+				//LOGGER.info(gson.toJson(blockChain));
 				return gson.toJson(blockChain);
 			}
 		}); 
@@ -164,8 +177,14 @@ public class CommonMethod {
 						return "{\"response\":\"vac is NULL\"}";
 					}
 					String vac = m.getVac();
+					LOGGER.info(vac);
+					String user = m.getUser();
+					LOGGER.info(user);
+					if(user==null||"".equals(user)) {
+						user="SYSTEM";
+					}
 					Block lastBlock = blockChain.get(blockChain.size() - 1);
-					Block newBlock = generateBlock(lastBlock, vac);
+					Block newBlock = generateBlock(lastBlock, vac,user,"");
 					if (isBlockValid(newBlock, lastBlock)) {
 						blockChain.add(newBlock);
 						LOGGER.debug(gson.toJson(blockChain));

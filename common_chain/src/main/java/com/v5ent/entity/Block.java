@@ -130,14 +130,22 @@ public class Block {
 		block.setVac("Error Block");
 		block.setIndex(-1);
 		block.setHash("Error");
+		block.setUser("SYSTEM ERROR");
 		block.setTimestamp(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
 		return block;
 	}
+	
 	public String getComments() {
 		return comments;
 	}
 	public void setComments(String comments) {
 		this.comments = comments;
+	}
+	public String getUser() {
+		return user;
+	}
+	public void setUser(String user) {
+		this.user = user;
 	}
 	
 }

@@ -5,9 +5,9 @@ import static spark.Spark.port;
 
 import net.matthew.Static_Value;
 
-public class SparkWeb {
+public class A_Value_SparkWeb {
 	public static void main(String[] args) {
-		port(Static_Value.ABS_A_CAPITAL_CHAIN_PORT);
+		port(Static_Value.ABS_A_VALUE_CHAIN_PORT);
 		CommonMethod.initial();
 	}
 }

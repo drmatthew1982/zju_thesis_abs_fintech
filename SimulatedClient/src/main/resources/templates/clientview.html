@@ -2,11 +2,11 @@
 <html>
 <head>
 <meta charset="UTF-8" />
-<title>Admin View Page</title>
+<title>Client View Page</title>
 
 </head>
 <body>
-	<h1>Admin View Page</h1>
+	<h1>Client View Page</h1>
 	<a href="/">Back</a>
 	ABS-Product:
 	<span th:text="${productcode}"></span> 
@@ -17,29 +17,15 @@
 			<th>Index</th>
 			<th>Content</th>
 			<th>Updated Time</th>
-			<th>Updated User</th>
-			<th>hash</th>
-			<th>prevHash</th>
 			<th>Comment</th>
 		</tr>
 		<tr th:each="block:${returnObject}">
 			<td th:text="${#numbers.formatInteger(block.index,0)}"></td>
 			<td th:text="${block.vac}"></td>
 			<td th:text="${block.timestamp}"></td>
-			<td th:text="${block.user}"></td>
-			<td th:text="${block.hash}"></td>
-			<td th:text="${block.prevHash}"></td>
 			<td th:text="${block.comments}"></td>
 		</tr>
 	</table>
-
-	<form action="addblock" method='post'>
-		<input type='hidden' name='user' value='admin'/>  
-    	<input type='hidden' name='type' th:value='${type}'/> 
-		<textarea name="vac" rows="3" cols="20"></textarea>
-		<br/>
-		<input type="submit" value="Add New Block"/>
-	</form>
 
 </body>
 </html>

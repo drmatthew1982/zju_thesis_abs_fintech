@@ -15,6 +15,8 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.converter.json.GsonFactoryBean;
 import org.springframework.stereotype.Controller;
@@ -33,6 +35,8 @@ import com.v5ent.entity.ReturnLatest;
 
 @Controller
 public class ServerController {
+	
+    private final Logger logger = LoggerFactory.getLogger(getClass());
 	private static DefaultHttpClient client = new DefaultHttpClient();
 	private static Block errorblock = Block.createErrorBlock();
 	final Gson gson = new GsonBuilder().setPrettyPrinting().create();
@@ -46,23 +50,21 @@ public class ServerController {
 	@RequestMapping("/getAll")
 	@ResponseBody
 	String getAllBlock(HttpServletRequest request) {
+		boolean isAdmin = false;
+		//String productCode = request.getParameter("productCode");
 		String user = request.getParameter("user");
+		if (user!=null&&"admin".equals(user)) {
+			isAdmin = true;
+		}
+		
 		String type = request.getParameter("type");
-		String url=Static_Value.ABS_A_MASTER_CHAIN_DOMAIN;
-		int port = Static_Value.ABS_A_MASTER_CHAIN_PORT;
-		if(type!=null&&Static_Value.TYPE_CAPITAL.equals(type)) {
-			url=Static_Value.ABS_A_CAPITAL_CHAIN_DOMAIN;
-			port=Static_Value.ABS_A_CAPITAL_CHAIN_PORT;
-		}
-		if(type!=null&&Static_Value.TYPE_REPUTATION.equals(type)) {
-			url=Static_Value.ABS_A_REPUTATION_CHAIN_DOMAIN;
-			port=Static_Value.ABS_A_REPUTATIONL_CHAIN_PORT;
-		}
-		if(type!=null&&Static_Value.TYPE_VALUE.equals(type)) {
-			url=Static_Value.ABS_A_VALUE_CHAIN_DOMAIN;
-			port=Static_Value.ABS_A_VALUE_CHAIN_PORT;
-		}
-		return "get";
+		String url = getUrl(type);
+		int port = getPort(type);
+		logger.info("getalltype:"+type);
+		logger.info("getallurl:"+url);
+		logger.info("getallport:"+port);
+		List<Block> chain=getAllValue(Static_Value.HTTP+url,port,Static_Value.ABS_GET_ALL_METHOD,isAdmin);
+		return gson.toJson(chain);
 
 	}
 
@@ -76,26 +78,45 @@ public class ServerController {
 			productCode = "a";
 		}
 		String type = request.getParameter("type");
+		url = getUrl(type);
+		port = getPort(type);
+		String vac = request.getParameter("vac");
+		String name = request.getParameter("user");
+		Block returnBlock = getPostValue(Static_Value.HTTP+url, port, Static_Value.ABS_DEFAULT_POST_METHOD, vac, name);
+		return gson.toJson(returnBlock);
+	}
+
+	private int getPort(String type) {
+		int port = Static_Value.ABS_A_MASTER_CHAIN_PORT;
 		if (type == null || "".equals(type.trim())) {
-			url = Static_Value.ABS_A_MASTER_CHAIN_DOMAIN;
 			port = Static_Value.ABS_A_MASTER_CHAIN_PORT;
 		}
 		if (Static_Value.TYPE_CAPITAL.equals(type)) {
-			url = Static_Value.ABS_A_CAPITAL_CHAIN_DOMAIN;
 			port = Static_Value.ABS_A_CAPITAL_CHAIN_PORT;
 		}
 		if (Static_Value.TYPE_REPUTATION.equals(type)) {
-			url = Static_Value.ABS_A_REPUTATION_CHAIN_DOMAIN;
 			port = Static_Value.ABS_A_REPUTATIONL_CHAIN_PORT;
+		}
+		if (Static_Value.TYPE_VALUE.equals(type)) {
+			port = Static_Value.ABS_A_VALUE_CHAIN_PORT;
+		}
+		return port;
+	}
+	private String getUrl(String type) {
+		String url=Static_Value.ABS_A_MASTER_CHAIN_DOMAIN;
+		if (type == null || "".equals(type.trim())) {
+			url = Static_Value.ABS_A_MASTER_CHAIN_DOMAIN;
+		}
+		if (Static_Value.TYPE_CAPITAL.equals(type)) {
+			url = Static_Value.ABS_A_CAPITAL_CHAIN_DOMAIN;
+		}
+		if (Static_Value.TYPE_REPUTATION.equals(type)) {
+			url = Static_Value.ABS_A_REPUTATION_CHAIN_DOMAIN;
 		}
 		if (Static_Value.ABS_A_VALUE_CHAIN_DOMAIN.equals(type)) {
 			url = Static_Value.ABS_A_VALUE_CHAIN_DOMAIN;
-			port = Static_Value.ABS_A_VALUE_CHAIN_PORT;
 		}
-		String vac = request.getParameter("vac");
-		String name = request.getParameter("name");
-		Block returnBlock = getPostValue(Static_Value.HTTP, port, Static_Value.ABS_DEFAULT_POST_METHOD, vac, name);
-		return gson.toJson(returnBlock);
+		return url;
 	}
 
 	@RequestMapping("/getlatest")
@@ -200,11 +221,11 @@ public class ServerController {
 		httpPost.setEntity(postEntity);
 		// httpPost.setEntity(postEntity);
 		try {
-
 			HttpResponse response = client.execute(httpPost);
 			response.addHeader("content-type", "application/json");
 			HttpEntity entity = response.getEntity();
 			String string = EntityUtils.toString(entity);
+			
 			Block returnBlock = gson.fromJson(string, Block.class);
 			return returnBlock;
 		} catch (ClientProtocolException e) {

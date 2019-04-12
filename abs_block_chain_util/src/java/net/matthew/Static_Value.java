@@ -16,7 +16,7 @@ public class Static_Value {
 	public static String ABS_DEFAULT_POST_METHOD="";
 	public static String HTTP="http://";
 	public static String TYPE_CAPITAL = "capital";
-	public static String TYPE_REPUTATION = "repitation";
+	public static String TYPE_REPUTATION = "reputation";
 	public static String TYPE_VALUE = "value";
 
 }

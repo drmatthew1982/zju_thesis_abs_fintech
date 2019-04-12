@@ -10,7 +10,7 @@
 	<table border="1">
 		<tr>
 			<th>Chain Name</th>
-			<th>Capital</th>
+			<th>Index</th>
 			<th>Content</th>
 			<th>hash</th>
 			<th>Updated Time</th>
@@ -33,7 +33,7 @@
 			<td><span th:text="${returnObject.reputation.hash}"></span></td>
 			<td><span th:text="${returnObject.reputation.timestamp}"></span></td>
 			<td><span th:text="${returnObject.reputation.comments}"></span></td>
-			<td><a href="adminview">View Detail</a></td>
+			<td><a href="javascript:document.reputationChianForm.submit();">View Detail</a></td>
 		</tr>
 		<tr>
 			<td>Value Chain</td>
@@ -42,21 +42,24 @@
 			<td><span th:text="${returnObject.value.hash}"></span></td>
 			<td><span th:text="${returnObject.value.timestamp}"></span></td>
 			<td><span th:text="${returnObject.value.comments}"></span></td>
-			<td><a href="adminview">Value Detail</a></td>
+			<td><a href="javascript:document.valueChianForm.submit();">Value Detail</a></td>
 		</tr>
 	</table>
 	
     <form name='capitalChianForm' action='adminview' method='post'>      
     	<input type='hidden' name='user' value='admin'/>  
     	<input type='hidden' name='type' value='capital'/> 
+    	<input type='hidden' name='product' th:value='${returnObject.code}'/> 
     </form>
     <form name='reputationChianForm' action='adminview' method='post'>      
     	<input type='hidden' name='user' value='admin'/>  
     	<input type='hidden' name='type' value='reputation'/> 
+    	<input type='hidden' name='product' th:value='${returnObject.code}'/> 
     </form>
     <form name='valueChianForm' action='adminview' method='post'>      
     	<input type='hidden' name='user' value='admin'/>  
     	<input type='hidden' name='type' value='value'/> 
+    	<input type='hidden' name='product' th:value='${returnObject.code}'/> 
     </form>  	
 </body>
 </html>
