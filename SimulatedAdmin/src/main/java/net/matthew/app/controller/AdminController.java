@@ -110,7 +110,6 @@ public class AdminController {
 			  String string = EntityUtils.toString(entity);
 			  List<LinkedTreeMap> returnObject=gson.fromJson(string, List.class);
 			  for(LinkedTreeMap map:returnObject) {
-				  
 				  String vac = (String) map.get("vac");
 				  if(vac.contains("illegalContent")) {
 					  map.put("comments","illegalContent detected");
