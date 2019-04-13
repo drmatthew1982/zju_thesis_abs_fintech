@@ -1,6 +1,7 @@
 package net.matthew.app.controller;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -44,7 +45,7 @@ public class ServerController {
 	@RequestMapping("/")
 	@ResponseBody
 	String home() {
-		return "Hello World!";
+		return "API Server";
 	}
 
 	@RequestMapping("/getAll")
@@ -67,7 +68,7 @@ public class ServerController {
 
 	@RequestMapping("/addBlock")
 	@ResponseBody
-	String addBlock(HttpServletRequest request) {
+	String addBlock(HttpServletRequest request, HttpServletResponse response) {
 		String productCode = request.getParameter("productCode");
 		String url = Static_Value.ABS_A_MASTER_CHAIN_DOMAIN;
 		int port = Static_Value.ABS_A_MASTER_CHAIN_PORT;
@@ -79,8 +80,29 @@ public class ServerController {
 		port = getPort(type);
 		String vac = request.getParameter("vac");
 		String name = request.getParameter("user");
+		
 		Block returnBlock = getPostValue(Static_Value.HTTP+url, port, Static_Value.ABS_DEFAULT_POST_METHOD, vac, name);
+		logger.info("Add type===:"+type);
+		if(type!=null&&(type.equals(Static_Value.TYPE_CAPITAL)||type.equals(Static_Value.TYPE_REPUTATION))) {
+			String value = caculatedValue(request, response);
+			logger.info("Add value===:"+value);
+			getPostValue(Static_Value.HTTP+Static_Value.ABS_A_VALUE_CHAIN_DOMAIN, Static_Value.ABS_A_VALUE_CHAIN_PORT, Static_Value.ABS_DEFAULT_POST_METHOD, value, "AUTO_UPDATE");
+		}
 		return gson.toJson(returnBlock);
+	}
+	@RequestMapping("/caculateValue")
+	@ResponseBody
+	String caculatedValue(HttpServletRequest request, HttpServletResponse response) {
+		String latestValue = getLatest(request, response);
+		ReturnLatest returnObject=gson.fromJson(latestValue, ReturnLatest.class);
+		Block captialBlock  =  returnObject.getCapital();
+		Block reputationBlock  =  returnObject.getReputation();
+		int captivalValue = letterToNumber(captialBlock.getVac());
+		//logger.info("===captial"+captivalValue);
+		int reputationValue = letterToNumber(reputationBlock.getVac());
+		//logger.info("===reputationValue"+reputationValue);
+		BigDecimal resultValue= BigDecimal.valueOf(captivalValue*0.7).add(BigDecimal.valueOf(reputationValue*0.3));
+		return String.valueOf(resultValue);
 	}
 
 	private int getPort(String type) {
@@ -236,6 +258,18 @@ public class ServerController {
 			httpPost.releaseConnection();
 		}
 
+	}
+	private int letterToNumber(String letter) {
+	    int length = letter.length();
+	    int num = 0;
+	    int number = 0;
+	    for(int i = 0; i < length; i++) {
+	        char ch = letter.charAt(length - i - 1);
+	        num = (int)(ch - 'A' + 1) ;
+	        num *= Math.pow(26, i);
+	        number += num;
+	    }
+	    return number;
 	}
 
 }
