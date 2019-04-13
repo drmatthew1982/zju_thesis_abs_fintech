@@ -165,14 +165,14 @@ public class ServerController {
 					index = returnBlock.getIndex();
 					hash = returnBlock.getHash();
 					returnBlock = getGetValue(url, port,
-							Static_Value.ABS_GET_BY_INDEX_METHOD + "/" + (returnBlock.getIndex() - 1), isAdmin);
+							Static_Value.ABS_GET_BY_INDEX_METHOD + "/" + (returnBlock.getIndex()), isAdmin);
 
 				}
 				if (illegalContent) {
 					returnBlock.setComments(
-							"The content you visit is has illegalContent in the latestblock, so we show older one to you"
-									+ "please contact Admin to fix it, the index is " + index
-									+ ", and the hash code is " + hash);
+							"The content you visit is has illegalContent in the latestblock, so we show older one to you.\n"
+									+ "Please contact Admin to fix it, \n the index is " + index
+									+ ", \n nand the hash code is \n" + hash);
 				}
 			}
 			return returnBlock;

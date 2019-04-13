@@ -2,6 +2,7 @@ package net.matthew.app.controller;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -24,6 +25,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.internal.LinkedTreeMap;
 import com.v5ent.entity.Block;
 import com.v5ent.entity.ReturnLatest;
 
@@ -76,7 +78,7 @@ public class ClientController {
       }
 	  @RequestMapping("/clientview")
       @ResponseBody
-      ModelAndView adminView(HttpServletRequest httprequest, HttpServletResponse httpresponse) {
+      ModelAndView clientview(HttpServletRequest httprequest, HttpServletResponse httpresponse) {
 		  HttpGet httpGet=null;
 		  try {
 			URIBuilder uriBuilder = new URIBuilder(API_URL_GETALL);
@@ -96,7 +98,17 @@ public class ClientController {
 			  response.addHeader("content-type","application/json");
 			  HttpEntity entity = response.getEntity();
 			  String string = EntityUtils.toString(entity);
-			  List<Block> returnObject=gson.fromJson(string, List.class);
+			  List<LinkedTreeMap> returnObject=gson.fromJson(string, List.class);
+			  for(LinkedTreeMap map:returnObject) {
+				  
+				  String vac = (String) map.get("vac");
+				  if(vac.contains("illegalContent")) {
+					  map.put("comments","illegalContent detected");
+					  map.put("vac","******");
+					  //block.setVac("******");
+				  }
+			  }
+			 
 			  ModelAndView modelAndView = new ModelAndView();
 			  modelAndView.setViewName("/clientview");
 			  modelAndView.addObject("returnObject", returnObject);

@@ -7,7 +7,7 @@
 </head>
 <body>
 	<h1>Client Page</h1>
-	<table border="1">
+	<table border="1" style='white-space: pre-line;'>
 		<tr>
 			<th>Chain Name</th>
 			<th>Capital</th>
@@ -15,7 +15,7 @@
 			<th>hash</th>
 			<th>Updated Time</th>
 			<th>Comment</th>
-			<th>View Detail</th>
+			<th>View History</th>
 		</tr>
 		<tr>
 			<td>Capital Chain</td>
@@ -24,7 +24,7 @@
 			<td><span th:text="${returnObject.capital.hash}"></span></td>
 			<td><span th:text="${returnObject.capital.timestamp}"></span></td>
 			<td><span th:text="${returnObject.capital.comments}"></span></td>
-			<td><a href="javascript:document.capitalChianForm.submit();">View Detail</a></td>
+			<td><a href="javascript:document.capitalChianForm.submit();">View History</a></td>
 		</tr>
 		<tr>
 			<td>Reputation Chain</td>
@@ -33,7 +33,7 @@
 			<td><span th:text="${returnObject.reputation.hash}"></span></td>
 			<td><span th:text="${returnObject.reputation.timestamp}"></span></td>
 			<td><span th:text="${returnObject.reputation.comments}"></span></td>
-			<td><a href="javascript:document.reputationChianForm.submit();">View Detail</a></td>
+			<td><a href="javascript:document.reputationChianForm.submit();">View History</a></td>
 		</tr>
 		<tr>
 			<td>Value Chain</td>
@@ -42,7 +42,7 @@
 			<td><span th:text="${returnObject.value.hash}"></span></td>
 			<td><span th:text="${returnObject.value.timestamp}"></span></td>
 			<td><span th:text="${returnObject.value.comments}"></span></td>
-			<td><a href="javascript:document.valueChianForm.submit();">Value Detail</a></td>
+			<td><a href="javascript:document.valueChianForm.submit();">Value History</a></td>
 		</tr>
 	</table>
 	

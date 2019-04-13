@@ -27,6 +27,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.internal.LinkedTreeMap;
 import com.v5ent.entity.Block;
 import com.v5ent.entity.ReturnLatest;
 
@@ -57,6 +58,7 @@ public class AdminController {
 			HttpEntity entity = response.getEntity();
 			String string = EntityUtils.toString(entity);
 			ReturnLatest returnObject=gson.fromJson(string, ReturnLatest.class);
+			
 			ModelAndView modelAndView = new ModelAndView();
 	        modelAndView.setViewName("/index");
 	        modelAndView.addObject("returnObject", returnObject);
@@ -106,7 +108,14 @@ public class AdminController {
 			  response.addHeader("content-type","application/json");
 			  HttpEntity entity = response.getEntity();
 			  String string = EntityUtils.toString(entity);
-			  List<Block> returnObject=gson.fromJson(string, List.class);
+			  List<LinkedTreeMap> returnObject=gson.fromJson(string, List.class);
+			  for(LinkedTreeMap map:returnObject) {
+				  
+				  String vac = (String) map.get("vac");
+				  if(vac.contains("illegalContent")) {
+					  map.put("comments","illegalContent detected");
+				  }
+			  }
 			  ModelAndView modelAndView = new ModelAndView();
 			  modelAndView.setViewName("/adminview");
 			  modelAndView.addObject("returnObject", returnObject);
