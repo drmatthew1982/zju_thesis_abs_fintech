@@ -79,8 +79,7 @@ public class ServerController {
 		url = getUrl(type);
 		port = getPort(type);
 		String vac = request.getParameter("vac");
-		String name = request.getParameter("user");
-		
+		String name = request.getParameter("user");	
 		Block returnBlock = getPostValue(Static_Value.HTTP+url, port, Static_Value.ABS_DEFAULT_POST_METHOD, vac, name);
 		logger.info("Add type===:"+type);
 		if(type!=null&&(type.equals(Static_Value.TYPE_CAPITAL)||type.equals(Static_Value.TYPE_REPUTATION))) {
