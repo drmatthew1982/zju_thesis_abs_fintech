@@ -113,6 +113,7 @@ public class AdminController {
 				  String vac = (String) map.get("vac");
 				  if(vac.contains("illegalContent")) {
 					  map.put("comments","illegalContent detected");
+					  
 				  }
 			  }
 			  ModelAndView modelAndView = new ModelAndView();

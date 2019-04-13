@@ -172,7 +172,7 @@ public class ServerController {
 					returnBlock.setComments(
 							"The content you visit is has illegalContent in the latestblock, so we show older one to you.\n"
 									+ "Please contact Admin to fix it, \n the index is " + index
-									+ ", \n nand the hash code is \n" +  hash);
+									+ ", \n nand the hash code is \n" + hash);
 				}
 			}
 			return returnBlock;
