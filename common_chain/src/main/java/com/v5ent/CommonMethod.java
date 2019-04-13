@@ -177,9 +177,7 @@ public class CommonMethod {
 						return "{\"response\":\"vac is NULL\"}";
 					}
 					String vac = m.getVac();
-					LOGGER.info(vac);
 					String user = m.getUser();
-					LOGGER.info(user);
 					if(user==null||"".equals(user)) {
 						user="SYSTEM";
 					}

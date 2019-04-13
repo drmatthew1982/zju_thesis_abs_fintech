@@ -34,8 +34,9 @@
 			<td th:text="${block.comments}"></td>
 		</tr>
 	</table>
-ADD New Block:
-* input content which contain "illegalContent" for testing the illegalContent
+	<div th:if=" ${type} != 'value'">
+	ADD New Block:
+	* input content which contain "illegalContent" for testing the illegalContent
 	<form action="addblock" method='post'>
 		<input type='hidden' name='user' value='admin'/>  
     	<input type='hidden' name='type' th:value='${type}'/> 
@@ -43,5 +44,9 @@ ADD New Block:
 		<br/>
 		<input type="submit" value="Add New Block"/>
 	</form>
+	</div>
+	<div th:if=" ${type} == 'value'">
+		Value is calculated automatically, unable to add by manually.
+	</div>
 </body>
 </html>

@@ -60,9 +60,6 @@ public class ServerController {
 		String type = request.getParameter("type");
 		String url = getUrl(type);
 		int port = getPort(type);
-		logger.info("getalltype:"+type);
-		logger.info("getallurl:"+url);
-		logger.info("getallport:"+port);
 		List<Block> chain=getAllValue(Static_Value.HTTP+url,port,Static_Value.ABS_GET_ALL_METHOD,isAdmin);
 		return gson.toJson(chain);
 
@@ -214,7 +211,7 @@ public class ServerController {
 		HttpPost httpPost = new HttpPost(url + ":" + port + "/" + method);
 		JSONObject jsonParam = new JSONObject();
 		jsonParam.put("vac", vac);
-		jsonParam.put("name", name);
+		jsonParam.put("user", name);
 		StringEntity postEntity = new StringEntity(jsonParam.toString(), "utf-8");// 解决中文乱码问题
 		postEntity.setContentEncoding("UTF-8");
 		postEntity.setContentType("application/json");
@@ -225,7 +222,6 @@ public class ServerController {
 			response.addHeader("content-type", "application/json");
 			HttpEntity entity = response.getEntity();
 			String string = EntityUtils.toString(entity);
-			
 			Block returnBlock = gson.fromJson(string, Block.class);
 			return returnBlock;
 		} catch (ClientProtocolException e) {
