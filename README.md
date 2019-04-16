@@ -1,3 +1,3 @@
 # essay_abs_fintech
 
-This project is ready for essay of Master degree of ZJU by Matthew Zhu
+This project is the design implement part of  the essay which for apply Master degree of ZJU by Matthew Zhu
