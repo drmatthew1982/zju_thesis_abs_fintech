@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8" />
+<title>Bank Operation</title>
+
+</head>
+<body>
+	<h1>Bank Operation</h1>
+	<span th:text="${result}"></span><br>
+	Account number 10000 is right transfer out traget account
+	<form name='form' action='/' method='post'>
+		Transfer account: 
+		<select name='account'>
+			<option value="10000">10000</option>
+			<option value="10001">10001</option>
+			<option value="12001">12001</option>
+			<option value="30003">30003</option>
+		</select> <br />
+			Transfer amount:
+		<select name='amount'>
+			<option value="10000">10000</option>
+			<option value="20000">20000</option>
+			<option value="30000">30000</option>
+			<option value="40000">40000</option>
+			<option value="50000">50000</option>
+			<option value="60000">60000</option>
+			<option value="70000">70000</option>
+			<option value="80000">80000</option>
+			<option value="90000">90000</option>
+		</select> <br /> 
+		<label><input name="type" type="radio" value="Out" checked="checked" />Transfer out</label> <br /> 
+		<label><input name="type" type="radio" value="In" />Transfer in</label> <br /> 
+		<input type='hidden' name='user' value='bank system' />
+		<input type="submit" value="submit" />
+	</form>
+</body>
+</html>
