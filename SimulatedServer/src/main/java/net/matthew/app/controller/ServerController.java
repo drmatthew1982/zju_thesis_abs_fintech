@@ -118,6 +118,9 @@ public class ServerController {
 		if (Static_Value.TYPE_VALUE.equals(type)) {
 			port = Static_Value.ABS_A_VALUE_CHAIN_PORT;
 		}
+		if (Static_Value.TYPE_BANK.equals(type)) {
+			port = Static_Value.ABS_A_BANK_CHAIN_PORT;
+		}
 		return port;
 	}
 	private String getUrl(String type) {
@@ -131,8 +134,11 @@ public class ServerController {
 		if (Static_Value.TYPE_REPUTATION.equals(type)) {
 			url = Static_Value.ABS_A_REPUTATION_CHAIN_DOMAIN;
 		}
-		if (Static_Value.ABS_A_VALUE_CHAIN_DOMAIN.equals(type)) {
+		if (Static_Value.TYPE_VALUE.equals(type)) {
 			url = Static_Value.ABS_A_VALUE_CHAIN_DOMAIN;
+		}
+		if (Static_Value.TYPE_BANK.equals(type)) {
+			url = Static_Value.ABS_A_BANK_CHAIN_DOMAIN;
 		}
 		return url;
 	}
@@ -158,10 +164,14 @@ public class ServerController {
 					Static_Value.ABS_A_REPUTATIONL_CHAIN_PORT, Static_Value.ABS_GET_LAST_METHOD, isAdmin);
 			Block valueBlock = getGetValue(Static_Value.HTTP + Static_Value.ABS_A_VALUE_CHAIN_DOMAIN,
 					Static_Value.ABS_A_VALUE_CHAIN_PORT, Static_Value.ABS_GET_LAST_METHOD, isAdmin);
+			Block bankBlock = getGetValue(Static_Value.HTTP + Static_Value.ABS_A_BANK_CHAIN_DOMAIN,
+					Static_Value.ABS_A_BANK_CHAIN_PORT, Static_Value.ABS_GET_LAST_METHOD, isAdmin);
 			returnObject.setCode(productCode);
 			returnObject.setCapital(productCaptialBlock);
 			returnObject.setReputation(productReputationBlock);
 			returnObject.setValue(valueBlock);
+			returnObject.setBank(bankBlock);
+			//returnObject.set
 		}
 		return gson.toJson(returnObject);
 	}

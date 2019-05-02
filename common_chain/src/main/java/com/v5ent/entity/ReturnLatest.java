@@ -5,6 +5,7 @@ public class ReturnLatest {
 	Block capital;
 	Block reputation;
 	Block value;
+	Block bank;
 	public String getCode() {
 		return code;
 	}
@@ -28,6 +29,12 @@ public class ReturnLatest {
 	}
 	public void setValue(Block value) {
 		this.value = value;
+	}
+	public Block getBank() {
+		return bank;
+	}
+	public void setBank(Block bank) {
+		this.bank = bank;
 	}
 	
 }

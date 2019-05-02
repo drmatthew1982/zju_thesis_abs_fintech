@@ -44,6 +44,15 @@
 			<td><span th:text="${returnObject.value.comments}"></span></td>
 			<td><a href="javascript:document.valueChianForm.submit();">Value History</a></td>
 		</tr>
+		<tr>
+			<td>Bank Chain</td>
+			<td><span th:text="${returnObject.bank.index}"></span></td>
+			<td><span th:text="${returnObject.bank.vac}"></span></td>
+			<td><span th:text="${returnObject.bank.hash}"></span></td>
+			<td><span th:text="${returnObject.bank.timestamp}"></span></td>
+			<td><span th:text="${returnObject.bank.comments}"></span></td>
+			<td><a href="javascript:document.bankChianForm.submit();">Value History</a></td>
+		</tr>
 	</table>	
     <form name='capitalChianForm' action='adminview' method='post'>      
     	<input type='hidden' name='user' value='admin'/>  
@@ -58,6 +67,11 @@
     <form name='valueChianForm' action='adminview' method='post'>      
     	<input type='hidden' name='user' value='admin'/>  
     	<input type='hidden' name='type' value='value'/> 
+    	<input type='hidden' name='product' th:value='${returnObject.code}'/> 
+    </form>
+     <form name='bankChianForm' action='adminview' method='post'>      
+    	<input type='hidden' name='user' value='admin'/>  
+    	<input type='hidden' name='type' value='bank'/> 
     	<input type='hidden' name='product' th:value='${returnObject.code}'/> 
     </form>
       	

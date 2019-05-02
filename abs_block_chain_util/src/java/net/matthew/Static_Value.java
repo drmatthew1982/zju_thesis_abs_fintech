@@ -9,6 +9,8 @@ public class Static_Value {
 	public static int ABS_A_REPUTATIONL_CHAIN_PORT=4569;
 	public static String ABS_A_VALUE_CHAIN_DOMAIN="localhost";
 	public static int ABS_A_VALUE_CHAIN_PORT=4570;
+	public static String ABS_A_BANK_CHAIN_DOMAIN="localhost";
+	public static int ABS_A_BANK_CHAIN_PORT=4571;
 	public static String ABS_GET_DEFAULT_METHOD="";
 	public static String ABS_GET_ALL_METHOD="all";
 	public static String ABS_GET_LAST_METHOD="getlast";
@@ -17,6 +19,7 @@ public class Static_Value {
 	public static String HTTP="http://";
 	public static String TYPE_CAPITAL = "capital";
 	public static String TYPE_REPUTATION = "reputation";
+	public static String TYPE_BANK = "bank";
 	public static String TYPE_VALUE = "value";
 
 }
