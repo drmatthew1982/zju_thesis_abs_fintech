@@ -34,7 +34,7 @@
 			<td th:text="${block.comments}"></td>
 		</tr>
 	</table>
-	<div th:if=" ${type} != 'value'">
+	<div th:if=" ${type} != 'value' and ${type} != 'bank'">
 	ADD New Block:
 	* input content which contain "illegalContent" for testing the illegalContent
 	<form action="addblock" method='post'>
@@ -47,6 +47,9 @@
 	</div>
 	<div th:if=" ${type} == 'value'">
 		Value is calculated automatically, unable to add by manually.
+	</div>
+	<div th:if=" ${type} == 'bank'">
+		Bank record is add by bank transaction account automatically, unable to add by manually.
 	</div>
 </body>
 </html>

@@ -2,6 +2,7 @@ package net.matthew.app.controller;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -25,8 +26,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSONObject;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.JavaType;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 
 import io.netty.handler.codec.http.HttpContentEncoder.Result;
 
@@ -59,10 +64,16 @@ public class ServerController {
 		}
 		
 		String type = request.getParameter("type");
+		
+		List<Block> chain=getAllBlock(type,isAdmin);
+		return gson.toJson(chain);
+
+	}
+	List<Block> getAllBlock(String type,boolean isAdmin) {
 		String url = getUrl(type);
 		int port = getPort(type);
 		List<Block> chain=getAllValue(Static_Value.HTTP+url,port,Static_Value.ABS_GET_ALL_METHOD,isAdmin);
-		return gson.toJson(chain);
+		return chain;
 
 	}
 
@@ -81,10 +92,10 @@ public class ServerController {
 		String vac = request.getParameter("vac");
 		String name = request.getParameter("user");	
 		Block returnBlock = getPostValue(Static_Value.HTTP+url, port, Static_Value.ABS_DEFAULT_POST_METHOD, vac, name);
-		logger.info("Add type===:"+type);
+		//logger.info("Add type===:"+type);
 		if(type!=null&&(type.equals(Static_Value.TYPE_CAPITAL)||type.equals(Static_Value.TYPE_REPUTATION))) {
 			String value = caculatedValue(request, response);
-			logger.info("Add value===:"+value);
+			//logger.info("Add value===:"+value);
 			getPostValue(Static_Value.HTTP+Static_Value.ABS_A_VALUE_CHAIN_DOMAIN, Static_Value.ABS_A_VALUE_CHAIN_PORT, Static_Value.ABS_DEFAULT_POST_METHOD, value, "AUTO_UPDATE");
 		}
 		return gson.toJson(returnBlock);
@@ -147,6 +158,7 @@ public class ServerController {
 	@ResponseBody
 	String getLatest(HttpServletRequest request, HttpServletResponse response) {
 		boolean isAdmin = false;
+		boolean isTransferToWrongAccount = false;
 		String productCode = request.getParameter("productCode");
 		String user = request.getParameter("user");
 		if (user!=null&&"admin".equals(user)) {
@@ -166,11 +178,22 @@ public class ServerController {
 					Static_Value.ABS_A_VALUE_CHAIN_PORT, Static_Value.ABS_GET_LAST_METHOD, isAdmin);
 			Block bankBlock = getGetValue(Static_Value.HTTP + Static_Value.ABS_A_BANK_CHAIN_DOMAIN,
 					Static_Value.ABS_A_BANK_CHAIN_PORT, Static_Value.ABS_GET_LAST_METHOD, isAdmin);
+			List<Block> chain = getAllBlock(Static_Value.TYPE_BANK,isAdmin);
+			for(Block block:chain) {
+				String vac=block.getVac();
+				if(vac.startsWith("Out")&&!vac.endsWith("10000")) {
+					bankBlock.setComments("Wrong Transaction is detected.");
+					isTransferToWrongAccount=true;
+					break;
+				}
+			}
+			//logger.info("======:"+productCaptialBlock.toString());
 			returnObject.setCode(productCode);
 			returnObject.setCapital(productCaptialBlock);
 			returnObject.setReputation(productReputationBlock);
 			returnObject.setValue(valueBlock);
 			returnObject.setBank(bankBlock);
+			returnObject.setTransferToWrongAccount(isTransferToWrongAccount);
 			//returnObject.set
 		}
 		return gson.toJson(returnObject);
@@ -222,7 +245,7 @@ public class ServerController {
 			response.addHeader("content-type", "application/json");
 			HttpEntity entity = response.getEntity();
 			String string = EntityUtils.toString(entity);
-			List<Block> returnChain = gson.fromJson(string, List.class);
+			List<Block> returnChain = gson.fromJson(string, new TypeToken<List<Block>>(){}.getType());
 			boolean illegalContent = false;
 			int index = -1;
 			String hash = "";

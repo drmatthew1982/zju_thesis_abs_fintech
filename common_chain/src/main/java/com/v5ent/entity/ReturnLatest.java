@@ -6,6 +6,7 @@ public class ReturnLatest {
 	Block reputation;
 	Block value;
 	Block bank;
+	boolean transferToWrongAccount;
 	public String getCode() {
 		return code;
 	}
@@ -36,5 +37,11 @@ public class ReturnLatest {
 	public void setBank(Block bank) {
 		this.bank = bank;
 	}
-	
+	public boolean isTransferToWrongAccount() {
+		return transferToWrongAccount;
+	}
+	public void setTransferToWrongAccount(boolean transferToWrongAccount) {
+		this.transferToWrongAccount = transferToWrongAccount;
+	}
+
 }
