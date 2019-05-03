@@ -41,8 +41,8 @@ import com.v5ent.entity.ReturnLatest;
 
 @Controller
 public class ServerController {
-	
-    private final Logger logger = LoggerFactory.getLogger(getClass());
+
+	private final Logger logger = LoggerFactory.getLogger(getClass());
 	private static DefaultHttpClient client = new DefaultHttpClient();
 	private static Block errorblock = Block.createErrorBlock();
 	final Gson gson = new GsonBuilder().setPrettyPrinting().create();
@@ -57,22 +57,23 @@ public class ServerController {
 	@ResponseBody
 	String getAllBlock(HttpServletRequest request) {
 		boolean isAdmin = false;
-		//String productCode = request.getParameter("productCode");
+		// String productCode = request.getParameter("productCode");
 		String user = request.getParameter("user");
-		if (user!=null&&"admin".equals(user)) {
+		if (user != null && "admin".equals(user)) {
 			isAdmin = true;
 		}
-		
+
 		String type = request.getParameter("type");
-		
-		List<Block> chain=getAllBlock(type,isAdmin);
+
+		List<Block> chain = getAllBlock(type, isAdmin);
 		return gson.toJson(chain);
 
 	}
-	List<Block> getAllBlock(String type,boolean isAdmin) {
+
+	List<Block> getAllBlock(String type, boolean isAdmin) {
 		String url = getUrl(type);
 		int port = getPort(type);
-		List<Block> chain=getAllValue(Static_Value.HTTP+url,port,Static_Value.ABS_GET_ALL_METHOD,isAdmin);
+		List<Block> chain = getAllValue(Static_Value.HTTP + url, port, Static_Value.ABS_GET_ALL_METHOD, isAdmin);
 		return chain;
 
 	}
@@ -90,28 +91,31 @@ public class ServerController {
 		url = getUrl(type);
 		port = getPort(type);
 		String vac = request.getParameter("vac");
-		String name = request.getParameter("user");	
-		Block returnBlock = getPostValue(Static_Value.HTTP+url, port, Static_Value.ABS_DEFAULT_POST_METHOD, vac, name);
-		//logger.info("Add type===:"+type);
-		if(type!=null&&(type.equals(Static_Value.TYPE_CAPITAL)||type.equals(Static_Value.TYPE_REPUTATION))) {
+		String name = request.getParameter("user");
+		Block returnBlock = getPostValue(Static_Value.HTTP + url, port, Static_Value.ABS_DEFAULT_POST_METHOD, vac,
+				name);
+		// logger.info("Add type===:"+type);
+		if (type != null && (type.equals(Static_Value.TYPE_CAPITAL) || type.equals(Static_Value.TYPE_REPUTATION))) {
 			String value = caculatedValue(request, response);
-			//logger.info("Add value===:"+value);
-			getPostValue(Static_Value.HTTP+Static_Value.ABS_A_VALUE_CHAIN_DOMAIN, Static_Value.ABS_A_VALUE_CHAIN_PORT, Static_Value.ABS_DEFAULT_POST_METHOD, value, "AUTO_UPDATE");
+			// logger.info("Add value===:"+value);
+			getPostValue(Static_Value.HTTP + Static_Value.ABS_A_VALUE_CHAIN_DOMAIN, Static_Value.ABS_A_VALUE_CHAIN_PORT,
+					Static_Value.ABS_DEFAULT_POST_METHOD, value, "AUTO_UPDATE");
 		}
 		return gson.toJson(returnBlock);
 	}
+
 	@RequestMapping("/caculateValue")
 	@ResponseBody
 	String caculatedValue(HttpServletRequest request, HttpServletResponse response) {
 		String latestValue = getLatest(request, response);
-		ReturnLatest returnObject=gson.fromJson(latestValue, ReturnLatest.class);
-		Block captialBlock  =  returnObject.getCapital();
-		Block reputationBlock  =  returnObject.getReputation();
+		ReturnLatest returnObject = gson.fromJson(latestValue, ReturnLatest.class);
+		Block captialBlock = returnObject.getCapital();
+		Block reputationBlock = returnObject.getReputation();
 		int captivalValue = letterToNumber(captialBlock.getVac());
-		//logger.info("===captial"+captivalValue);
+		// logger.info("===captial"+captivalValue);
 		int reputationValue = letterToNumber(reputationBlock.getVac());
-		//logger.info("===reputationValue"+reputationValue);
-		BigDecimal resultValue= BigDecimal.valueOf(captivalValue*0.7).add(BigDecimal.valueOf(reputationValue*0.3));
+		// logger.info("===reputationValue"+reputationValue);
+		BigDecimal resultValue = BigDecimal.valueOf(captivalValue * 0.7).add(BigDecimal.valueOf(reputationValue * 0.3));
 		return String.valueOf(resultValue);
 	}
 
@@ -134,8 +138,9 @@ public class ServerController {
 		}
 		return port;
 	}
+
 	private String getUrl(String type) {
-		String url=Static_Value.ABS_A_MASTER_CHAIN_DOMAIN;
+		String url = Static_Value.ABS_A_MASTER_CHAIN_DOMAIN;
 		if (type == null || "".equals(type.trim())) {
 			url = Static_Value.ABS_A_MASTER_CHAIN_DOMAIN;
 		}
@@ -161,7 +166,7 @@ public class ServerController {
 		boolean isTransferToWrongAccount = false;
 		String productCode = request.getParameter("productCode");
 		String user = request.getParameter("user");
-		if (user!=null&&"admin".equals(user)) {
+		if (user != null && "admin".equals(user)) {
 			isAdmin = true;
 		}
 		response.addHeader("content-type", "application/json");
@@ -178,23 +183,23 @@ public class ServerController {
 					Static_Value.ABS_A_VALUE_CHAIN_PORT, Static_Value.ABS_GET_LAST_METHOD, isAdmin);
 			Block bankBlock = getGetValue(Static_Value.HTTP + Static_Value.ABS_A_BANK_CHAIN_DOMAIN,
 					Static_Value.ABS_A_BANK_CHAIN_PORT, Static_Value.ABS_GET_LAST_METHOD, isAdmin);
-			List<Block> chain = getAllBlock(Static_Value.TYPE_BANK,isAdmin);
-			for(Block block:chain) {
-				String vac=block.getVac();
-				if(vac.startsWith("Out")&&!vac.endsWith("10000")) {
+			List<Block> chain = getAllBlock(Static_Value.TYPE_BANK, isAdmin);
+			for (Block block : chain) {
+				String vac = block.getVac();
+				if (vac.startsWith("Out") && !vac.endsWith("10000")) {
 					bankBlock.setComments("Wrong Transaction is detected.");
-					isTransferToWrongAccount=true;
+					isTransferToWrongAccount = true;
 					break;
 				}
 			}
-			//logger.info("======:"+productCaptialBlock.toString());
+			// logger.info("======:"+productCaptialBlock.toString());
 			returnObject.setCode(productCode);
 			returnObject.setCapital(productCaptialBlock);
 			returnObject.setReputation(productReputationBlock);
 			returnObject.setValue(valueBlock);
 			returnObject.setBank(bankBlock);
 			returnObject.setTransferToWrongAccount(isTransferToWrongAccount);
-			//returnObject.set
+			// returnObject.set
 		}
 		return gson.toJson(returnObject);
 	}
@@ -234,10 +239,13 @@ public class ServerController {
 			e.printStackTrace();
 			return errorblock;
 		} finally {
-			httpGet.releaseConnection();
+			if (httpGet != null) {
+				httpGet.releaseConnection();
+			}
 		}
 
 	}
+
 	List<Block> getAllValue(String url, int port, String method, boolean isAdmin) {
 		HttpGet httpGet = new HttpGet(url + ":" + port + "/" + method);
 		try {
@@ -245,7 +253,8 @@ public class ServerController {
 			response.addHeader("content-type", "application/json");
 			HttpEntity entity = response.getEntity();
 			String string = EntityUtils.toString(entity);
-			List<Block> returnChain = gson.fromJson(string, new TypeToken<List<Block>>(){}.getType());
+			List<Block> returnChain = gson.fromJson(string, new TypeToken<List<Block>>() {
+			}.getType());
 			boolean illegalContent = false;
 			int index = -1;
 			String hash = "";
@@ -258,9 +267,12 @@ public class ServerController {
 			e.printStackTrace();
 			return new LinkedList<Block>();
 		} finally {
-			httpGet.releaseConnection();
+			if (httpGet != null) {
+				httpGet.releaseConnection();
+			}
 		}
 	}
+
 	Block getPostValue(String url, int port, String method, String vac, String name) {
 		HttpPost httpPost = new HttpPost(url + ":" + port + "/" + method);
 		JSONObject jsonParam = new JSONObject();
@@ -287,21 +299,24 @@ public class ServerController {
 			e.printStackTrace();
 			return errorblock;
 		} finally {
-			httpPost.releaseConnection();
+			if (httpPost != null) {
+				httpPost.releaseConnection();
+			}
 		}
 
 	}
+
 	private int letterToNumber(String letter) {
-	    int length = letter.length();
-	    int num = 0;
-	    int number = 0;
-	    for(int i = 0; i < length; i++) {
-	        char ch = letter.charAt(length - i - 1);
-	        num = (int)(ch - 'A' + 1) ;
-	        num *= Math.pow(26, i);
-	        number += num;
-	    }
-	    return number;
+		int length = letter.length();
+		int num = 0;
+		int number = 0;
+		for (int i = 0; i < length; i++) {
+			char ch = letter.charAt(length - i - 1);
+			num = (int) (ch - 'A' + 1);
+			num *= Math.pow(26, i);
+			number += num;
+		}
+		return number;
 	}
 
 }

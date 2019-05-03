@@ -22,6 +22,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -37,14 +38,70 @@ public class AdminController {
 	public static final String API_URL_GETLATEST = "http://localhost:8080/getlatest";
 	public static final String API_URL_GETALL = "http://localhost:8080/getAll";
 	public static final String API_URL_ADDBLOCK = "http://localhost:8080/addBlock";
+	public static final String API_URL_GET_REMOTE_DEBT_AND_ROE = "http://localhost:8084/getDebtAndRoe";
+	public static String DEBT = null;
+	public static String ROE = null;
+
 	private static DefaultHttpClient client = new DefaultHttpClient();
 
 	final Gson gson = new GsonBuilder().setPrettyPrinting().create();
 	ModelAndView errorModelAndView = new ModelAndView();
 
-	@RequestMapping("/")
+	@RequestMapping(value = "/", method = RequestMethod.GET)
 	@ResponseBody
-	ModelAndView home() {
+	ModelAndView home(HttpServletRequest httprequest, HttpServletResponse httpresponse) {
+		ModelAndView modelAndView = returnIndexValue();
+		if(DEBT!=null&&ROE!=null) {
+			appendDebtandRoe(modelAndView,httprequest,httpresponse);
+		}
+		return modelAndView;
+
+	}
+
+	@RequestMapping(value = "/", method = RequestMethod.POST)
+	@ResponseBody
+	ModelAndView saveValues(HttpServletRequest httprequest, HttpServletResponse httpresponse) {
+		String targetdebt = httprequest.getParameter("debt");
+		String targetroe = httprequest.getParameter("roe");
+		DEBT = targetdebt;
+		ROE = targetroe;
+		ModelAndView modelAndView = returnIndexValue();
+		appendDebtandRoe(modelAndView,httprequest,httpresponse);
+		return modelAndView;
+	}
+	void appendDebtandRoe(ModelAndView modelAndView,HttpServletRequest httprequest, HttpServletResponse httpresponse) {
+		modelAndView.addObject("debt",DEBT);
+		modelAndView.addObject("ROE",ROE);
+		String remoteDebtAndRoe=getRemoteDebtAndRoe(httprequest,httpresponse);
+		String[] debtAndRoe=remoteDebtAndRoe.split(",");
+		String debt = debtAndRoe[0];
+		String roe = debtAndRoe[1];
+		modelAndView.addObject("remoteDebt",debt);
+		modelAndView.addObject("remoteRoe",roe);
+	}
+	
+
+	String getRemoteDebtAndRoe(HttpServletRequest httprequest, HttpServletResponse httpresponse) {
+		HttpGet httpGet = null;
+		HttpResponse response;
+		try {
+			URIBuilder uriBuilder = new URIBuilder(API_URL_GET_REMOTE_DEBT_AND_ROE);
+			httpGet = new HttpGet(uriBuilder.build());
+			response = client.execute(httpGet);
+			HttpEntity entity = response.getEntity();
+			String result = EntityUtils.toString(entity);
+			return result;
+		} catch (URISyntaxException | IOException e) {
+			e.printStackTrace();
+			return "0,0";
+		} finally {
+			if (httpGet != null) {
+				httpGet.releaseConnection();
+			}
+		}
+	}
+
+	ModelAndView returnIndexValue() {
 		HttpGet httpGet = null;
 		try {
 			URIBuilder uriBuilder = new URIBuilder(API_URL_GETLATEST);
@@ -62,6 +119,8 @@ public class AdminController {
 			ModelAndView modelAndView = new ModelAndView();
 			modelAndView.setViewName("/index");
 			modelAndView.addObject("returnObject", returnObject);
+			modelAndView.addObject("debt", DEBT);
+			modelAndView.addObject("roe", ROE);
 			return modelAndView;
 		} catch (ClientProtocolException e) {
 			// TODO Auto-generated catch block
@@ -83,7 +142,6 @@ public class AdminController {
 				httpGet.releaseConnection();
 			}
 		}
-
 	}
 
 	@RequestMapping("/adminview")
@@ -140,6 +198,10 @@ public class AdminController {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return errorModelAndView;
+		} finally {
+			if (httpGet != null) {
+				httpGet.releaseConnection();
+			}
 		}
 	}
 
@@ -183,7 +245,19 @@ public class AdminController {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return errorModelAndView;
+		} finally {
+			if (httpPost != null) {
+				httpPost.releaseConnection();
+			}
 		}
+
+	}
+
+	@RequestMapping("/setValues")
+	@ResponseBody
+	ModelAndView setValues(HttpServletRequest httprequest, HttpServletResponse httpresponse) {
+		ModelAndView modelAndView = returnIndexValue();
+		return modelAndView;
 
 	}
 

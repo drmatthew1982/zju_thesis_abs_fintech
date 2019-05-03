@@ -10,6 +10,66 @@
 	<div th:if=" ${returnObject.transferToWrongAccount}">
 		<font size="3" color="red">Wrong Transaction is detected.</font>
 	</div>
+	<div th:if=" ${debt}==null">
+		<font size="3" color="red">DEBT is not setted yet.</font>
+	</div>
+	<div th:if=" ${roe}==null">
+		<font size="3" color="red">ROE is not setted yet.</font>
+	</div>
+	<form name='form' action='/' method='post'>
+		Target DEBT: <select name='debt'>
+			<option value="10" th:selected="${debt =='10' }">10</option>
+			<option value="20" th:selected="${debt =='20' }">20</option>
+			<option value="30" th:selected="${debt =='30' }">30</option>
+			<option value="40" th:selected="${debt =='40' }">40</option>
+			<option value="50" th:selected="${debt =='50' }">50</option>
+			<option value="60" th:selected="${debt =='60' }">60</option>
+			<option value="70" th:selected="${debt =='70' }">70</option>
+			<option value="80" th:selected="${debt =='80' }">80</option>
+			<option value="90" th:selected="${debt =='90' }">90</option>
+			<option value="100" th:selected="${debt =='100' }">100</option>
+		</select> <br /> Target ROE: <select name='roe'>
+			<option value="1" th:selected="${roe =='1' }">1</option>
+			<option value="2" th:selected="${roe =='2' }">2</option>
+			<option value="3" th:selected="${roe =='3' }">3</option>
+			<option value="4" th:selected="${roe =='4' }">4</option>
+			<option value="5" th:selected="${roe =='5' }">5</option>
+			<option value="6" th:selected="${roe =='6' }">6</option>
+			<option value="7" th:selected="${roe =='7' }">7</option>
+			<option value="8" th:selected="${roe =='8' }">8</option>
+			<option value="9" th:selected="${roe =='9' }">9</option>
+			<option value="10" th:selected="${roe =='10'}">10</option>
+		</select>
+
+		<div th:if="${remoteDebt}!=null">
+			<font size="3">Real DEBT is:<span th:text="${remoteDebt}"></span>
+			</font>
+
+		</div>
+		<div th:if="${remoteDebt gt debt}">
+			<font size="3" color='red'>Warning: Real DBET is Great than
+				target Value</font>
+		</div>
+		<div th:if="!${remoteDebt gt debt}">
+			<font size="3" color='green'>Real DBET is less than or equals
+				as target Value</font>
+		</div>
+		<div th:if="${remoteRoe}!=null">
+			<font size="3">Real Roe is:<span th:text="${remoteRoe}"></span>
+			</font>
+
+		</div>
+		<div th:if="${remoteRoe lt roe}">
+			<font size="3" color='red'>Warning: Real ROE is less than
+				target Value</font>
+		</div>
+		<div th:if="!${remoteRoe lt roe}">
+			<font size="3" color='green'>Real ROE is greater than or
+				equals as target Value</font>
+		</div>
+
+		<br /> <input type="submit" value="submit or update" />
+	</form>
 	<table border="1">
 		<tr>
 			<th>Chain Name</th>
@@ -27,7 +87,8 @@
 			<td><span th:text="${returnObject.capital.hash}"></span></td>
 			<td><span th:text="${returnObject.capital.timestamp}"></span></td>
 			<td><span th:text="${returnObject.capital.comments}"></span></td>
-			<td><a href="javascript:document.capitalChianForm.submit();">View History</a></td>
+			<td><a href="javascript:document.capitalChianForm.submit();">View
+					History</a></td>
 		</tr>
 		<tr>
 			<td>Reputation Chain</td>
@@ -36,7 +97,8 @@
 			<td><span th:text="${returnObject.reputation.hash}"></span></td>
 			<td><span th:text="${returnObject.reputation.timestamp}"></span></td>
 			<td><span th:text="${returnObject.reputation.comments}"></span></td>
-			<td><a href="javascript:document.reputationChianForm.submit();">View History</a></td>
+			<td><a href="javascript:document.reputationChianForm.submit();">View
+					History</a></td>
 		</tr>
 		<tr>
 			<td>Value Chain</td>
@@ -45,7 +107,8 @@
 			<td><span th:text="${returnObject.value.hash}"></span></td>
 			<td><span th:text="${returnObject.value.timestamp}"></span></td>
 			<td><span th:text="${returnObject.value.comments}"></span></td>
-			<td><a href="javascript:document.valueChianForm.submit();">Value History</a></td>
+			<td><a href="javascript:document.valueChianForm.submit();">Value
+					History</a></td>
 		</tr>
 		<tr>
 			<td>Bank Chain</td>
@@ -54,29 +117,30 @@
 			<td><span th:text="${returnObject.bank.hash}"></span></td>
 			<td><span th:text="${returnObject.bank.timestamp}"></span></td>
 			<td><span th:text="${returnObject.bank.comments}"></span></td>
-			<td><a href="javascript:document.bankChianForm.submit();">Value History</a></td>
+			<td><a href="javascript:document.bankChianForm.submit();">Value
+					History</a></td>
 		</tr>
-	</table>	
-    <form name='capitalChianForm' action='adminview' method='post'>      
-    	<input type='hidden' name='user' value='admin'/>  
-    	<input type='hidden' name='type' value='capital'/> 
-    	<input type='hidden' name='product' th:value='${returnObject.code}'/> 
-    </form>
-    <form name='reputationChianForm' action='adminview' method='post'>      
-    	<input type='hidden' name='user' value='admin'/>  
-    	<input type='hidden' name='type' value='reputation'/> 
-    	<input type='hidden' name='product' th:value='${returnObject.code}'/> 
-    </form>
-    <form name='valueChianForm' action='adminview' method='post'>      
-    	<input type='hidden' name='user' value='admin'/>  
-    	<input type='hidden' name='type' value='value'/> 
-    	<input type='hidden' name='product' th:value='${returnObject.code}'/> 
-    </form>
-     <form name='bankChianForm' action='adminview' method='post'>      
-    	<input type='hidden' name='user' value='admin'/>  
-    	<input type='hidden' name='type' value='bank'/> 
-    	<input type='hidden' name='product' th:value='${returnObject.code}'/> 
-    </form>
-      	
+	</table>
+	<form name='capitalChianForm' action='adminview' method='post'>
+		<input type='hidden' name='user' value='admin' /> <input
+			type='hidden' name='type' value='capital' /> <input type='hidden'
+			name='product' th:value='${returnObject.code}' />
+	</form>
+	<form name='reputationChianForm' action='adminview' method='post'>
+		<input type='hidden' name='user' value='admin' /> <input
+			type='hidden' name='type' value='reputation' /> <input type='hidden'
+			name='product' th:value='${returnObject.code}' />
+	</form>
+	<form name='valueChianForm' action='adminview' method='post'>
+		<input type='hidden' name='user' value='admin' /> <input
+			type='hidden' name='type' value='value' /> <input type='hidden'
+			name='product' th:value='${returnObject.code}' />
+	</form>
+	<form name='bankChianForm' action='adminview' method='post'>
+		<input type='hidden' name='user' value='admin' /> <input
+			type='hidden' name='type' value='bank' /> <input type='hidden'
+			name='product' th:value='${returnObject.code}' />
+	</form>
+
 </body>
 </html>

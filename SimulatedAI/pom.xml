@@ -5,7 +5,7 @@
 	<groupId>springboot</groupId>
 	<artifactId>simulatedAI</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>testSpringBoot</name>
+	<name>simulatedAI</name>
 	<packaging>jar</packaging>
 
 	<!-- 继承父包 -->
@@ -47,6 +47,11 @@
 		<dependency>
 			<groupId>blockchainutil</groupId>
 			<artifactId>blockchainutil</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>com.v5ent</groupId>
+			<artifactId>commonchain</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 	</dependencies>
