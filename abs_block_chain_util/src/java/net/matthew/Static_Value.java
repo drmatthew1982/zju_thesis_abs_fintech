@@ -11,6 +11,10 @@ public class Static_Value {
 	public static int ABS_A_VALUE_CHAIN_PORT=4570;
 	public static String ABS_A_BANK_CHAIN_DOMAIN="localhost";
 	public static int ABS_A_BANK_CHAIN_PORT=4571;
+	public static String ABS_A_CDO_CHAIN_DOMAIN="localhost";
+	public static int ABS_A_BANK_CDO_PORT=4572;
+	public static String ABS_A_CDOS_CHAIN_DOMAIN="localhost";
+	public static int ABS_A_BANK_CDOS_PORT=4573;
 	public static String ABS_GET_DEFAULT_METHOD="";
 	public static String ABS_GET_ALL_METHOD="all";
 	public static String ABS_GET_LAST_METHOD="getlast";
