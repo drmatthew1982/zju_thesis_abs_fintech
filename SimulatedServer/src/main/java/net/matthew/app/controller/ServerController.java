@@ -3,6 +3,7 @@ package net.matthew.app.controller;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -36,8 +37,13 @@ import com.google.gson.reflect.TypeToken;
 import io.netty.handler.codec.http.HttpContentEncoder.Result;
 
 import net.matthew.Static_Value;
+import net.matthew.app.data.ABS;
+import net.matthew.app.data.CDO;
+import net.matthew.app.data.CDOs;
+
 import com.v5ent.entity.Block;
 import com.v5ent.entity.ReturnLatest;
+import com.v5ent.entity.WrappedChain;
 
 @Controller
 public class ServerController {
@@ -46,6 +52,98 @@ public class ServerController {
 	private static DefaultHttpClient client = new DefaultHttpClient();
 	private static Block errorblock = Block.createErrorBlock();
 	final Gson gson = new GsonBuilder().setPrettyPrinting().create();
+
+	private static ABS RETURNED_ABS;
+	private static CDO RETURNED_CDO;
+	private static CDOs RETURNED_CDOS;
+
+	ABS getAbs() {
+		if (RETURNED_ABS == null) {
+			RETURNED_ABS = new ABS();
+			RETURNED_ABS.setName("abs_a");
+			RETURNED_ABS.setLink(Static_Value.HTTP + Static_Value.ABS_A_MASTER_CHAIN_DOMAIN + ":8082");
+
+			CDO cdo = new CDO();
+			cdo.setName("CDO_A");
+			cdo.setLink(Static_Value.HTTP + Static_Value.ABS_A_MASTER_CHAIN_DOMAIN + ":8082/cdo");
+			RETURNED_ABS.setCdo(cdo);
+
+			CDOs cdos = new CDOs();
+			cdos.setName("CDOs_A");
+			cdos.setLink("Static_Value.HTTP+Static_Value.ABS_A_MASTER_CHAIN_DOMAIN+\":8082/cdos");
+			RETURNED_ABS.setCdos(cdos);
+		}
+		return RETURNED_ABS;
+	}
+
+	CDO getCDO() {
+		if (RETURNED_CDO == null) {
+			RETURNED_CDO = new CDO();
+			RETURNED_CDO.setName("CDO_A");
+			RETURNED_CDO.setLink(Static_Value.HTTP + Static_Value.ABS_A_MASTER_CHAIN_DOMAIN + ":8082/cdo");
+
+			ABS abs = new ABS();
+			abs.setName("abs_a");
+			abs.setLink(Static_Value.HTTP + Static_Value.ABS_A_MASTER_CHAIN_DOMAIN + ":8082");
+
+			ABS faked_ABS_B = new ABS();
+			faked_ABS_B.setName("faked_ABS_B");
+
+			ABS faked_ABS_C = new ABS();
+			faked_ABS_B.setName("faked_ABS_C");
+
+			HashMap absmap = new HashMap();
+			absmap.put("abs_a", abs);
+			absmap.put("faked_ABS_B", faked_ABS_B);
+			absmap.put("faked_ABS_C", faked_ABS_C);
+			RETURNED_CDO.setAbs(absmap);
+		}
+		return RETURNED_CDO;
+	}
+
+	CDOs getCdos() {
+		if (RETURNED_CDOS == null) {
+			RETURNED_CDOS = new CDOs();
+			RETURNED_CDOS.setName("CDOs_A");
+			RETURNED_CDOS.setLink("Static_Value.HTTP+Static_Value.ABS_A_MASTER_CHAIN_DOMAIN+\":8082/cdos");
+			
+			ABS abs = new ABS();
+			abs.setName("abs_a");
+			abs.setLink(Static_Value.HTTP + Static_Value.ABS_A_MASTER_CHAIN_DOMAIN + ":8082");
+
+			ABS faked_ABS_B = new ABS();
+			faked_ABS_B.setName("faked_ABS_B");
+
+			ABS faked_ABS_C = new ABS();
+			faked_ABS_B.setName("faked_ABS_C");
+
+			HashMap<String,ABS> absmap = new HashMap<String,ABS>();
+			absmap.put("abs_a", abs);
+			absmap.put("faked_ABS_B", faked_ABS_B);
+			absmap.put("faked_ABS_C", faked_ABS_C);
+			
+			CDO cdo = new CDO();
+			cdo.setName("CDO_A");
+			cdo.setLink(Static_Value.HTTP + Static_Value.ABS_A_MASTER_CHAIN_DOMAIN + ":8082/cdo");
+			cdo.setAbs(absmap);
+			
+			ABS faked_ABS_D = new ABS();
+			faked_ABS_D.setName("faked_ABS_D");
+			ABS faked_ABS_E = new ABS();
+			faked_ABS_E.setName("faked_ABS_E");
+			HashMap<String,ABS> other_absmap = new HashMap<String,ABS>();
+			other_absmap.put("faked_ABS_D", faked_ABS_D);
+			other_absmap.put("faked_ABS_E", faked_ABS_E);
+			CDO faked_cdo_B = new CDO();
+			faked_cdo_B.setName("Faked_CDO_B");
+			faked_cdo_B.setAbs(other_absmap);
+			
+			HashMap<String, CDO> cdomap=new HashMap<String, CDO>();
+			cdomap.put("CDO_A", cdo);
+			cdomap.put("Faked_CDO_B", faked_cdo_B);
+		}
+		return RETURNED_CDOS;
+	}
 
 	@RequestMapping("/")
 	@ResponseBody
@@ -66,7 +164,15 @@ public class ServerController {
 		String type = request.getParameter("type");
 
 		List<Block> chain = getAllBlock(type, isAdmin);
-		return gson.toJson(chain);
+		WrappedChain wrappedChain = new WrappedChain();
+		if (type.equals(Static_Value.TYPE_CDO)) {
+			wrappedChain.setCdo(RETURNED_CDO);
+		}
+		if (type.equals(Static_Value.TYPE_CDOS)) {
+			wrappedChain.setCdos(RETURNED_CDOS);
+		}
+		wrappedChain.setChain(chain);
+		return gson.toJson(wrappedChain);
 
 	}
 
@@ -156,6 +262,15 @@ public class ServerController {
 		if (Static_Value.TYPE_BANK.equals(type)) {
 			url = Static_Value.ABS_A_BANK_CHAIN_DOMAIN;
 		}
+		if (Static_Value.TYPE_RANK.equals(type)) {
+			url = Static_Value.ABS_A_RANK_CHAIN_DOMAIN;
+		}
+		if (Static_Value.TYPE_CDO.equals(type)) {
+			url = Static_Value.ABS_A_CDO_CHAIN_DOMAIN;
+		}
+		if (Static_Value.TYPE_CDOS.equals(type)) {
+			url = Static_Value.ABS_A_CDOS_CHAIN_DOMAIN;
+		}
 		return url;
 	}
 
@@ -199,6 +314,7 @@ public class ServerController {
 			returnObject.setValue(valueBlock);
 			returnObject.setBank(bankBlock);
 			returnObject.setTransferToWrongAccount(isTransferToWrongAccount);
+			returnObject.setAbs(getAbs());
 			// returnObject.set
 		}
 		return gson.toJson(returnObject);

@@ -1,11 +1,14 @@
 package com.v5ent.entity;
 
+import net.matthew.app.data.ABS;
+
 public class ReturnLatest {
 	String code;
 	Block capital;
 	Block reputation;
 	Block value;
 	Block bank;
+	ABS abs;
 	boolean transferToWrongAccount;
 	public String getCode() {
 		return code;
@@ -42,6 +45,12 @@ public class ReturnLatest {
 	}
 	public void setTransferToWrongAccount(boolean transferToWrongAccount) {
 		this.transferToWrongAccount = transferToWrongAccount;
+	}
+	public ABS getAbs() {
+		return abs;
+	}
+	public void setAbs(ABS abs) {
+		this.abs = abs;
 	}
 
 }

@@ -29,8 +29,12 @@ import org.springframework.web.servlet.ModelAndView;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.internal.LinkedTreeMap;
+import com.google.gson.reflect.TypeToken;
 import com.v5ent.entity.Block;
 import com.v5ent.entity.ReturnLatest;
+import com.v5ent.entity.WrappedChain;
+
+import net.matthew.Static_Value;
 
 @Controller
 public class AdminController {
@@ -166,18 +170,19 @@ public class AdminController {
 			response.addHeader("content-type", "application/json");
 			HttpEntity entity = response.getEntity();
 			String string = EntityUtils.toString(entity);
-			List<LinkedTreeMap> returnObject = gson.fromJson(string, List.class);
-			for (LinkedTreeMap map : returnObject) {
-				String vac = (String) map.get("vac");
+			WrappedChain wrappedChain = gson.fromJson(string, new TypeToken<WrappedChain>() {}.getType());
+			List<Block> returnObject=wrappedChain.getChain();
+			for (Block block : returnObject) {
+				String vac = block.getVac();
 				if (vac.contains("illegalContent")) {
-					map.put("comments", "IllegalContent is detected");
+					block.setComments("IllegalContent is detected");
 
 				}
 			}
-			for (LinkedTreeMap map : returnObject) {
-				String vac = (String) map.get("vac");
+			for (Block block : returnObject) {
+				String vac =block.getVac();
 				if (vac.startsWith("Out") && !vac.endsWith("10000")) {
-					map.put("comments", "Wrong Transaction is detected.");
+					block.setComments("Wrong Transaction is detected.");
 				}
 			}
 			ModelAndView modelAndView = new ModelAndView();
