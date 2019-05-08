@@ -8,11 +8,9 @@
 <body>
 	<h1>Admin View Page</h1>
 	<a href="/">Back To Home</a>
-	<br/>
-	ABS-Product:
+	<br /> ABS-Product:
 	<span th:text="${productcode}"></span>
-	<br/>
-	Block Chain Type:
+	<br /> Block Chain Type:
 	<span th:text="${type}"></span>
 	<table border="1">
 		<tr>
@@ -34,51 +32,91 @@
 			<td th:text="${block.comments}"></td>
 		</tr>
 	</table>
-	<div th:if=" ${type} != 'value' and ${type} != 'bank' and ${type} != 'cdo' and ${type} != 'cdos'">
-	<font size="3">ADD New Block:</font>
-	<font size="3">* input content which contain "illegalContent" for testing the illegalContent</font>
-	<form action="addblock" method='post'>
-		<input type='hidden' name='user' value='admin'/>  
-    	<input type='hidden' name='type' th:value='${type}'/> 
-		<textarea name="vac" rows="3" cols="20"></textarea>
-		<br/>
-		<input type="submit" value="Add New Block"/>
-	</form>
+	<br />
+	<div
+		th:if=" ${type} != 'value' and ${type} != 'bank' and ${type} != 'cdo' and ${type} != 'cdos'">
+		<font size="3">ADD New Block:</font> <font size="3">* input
+			content which contain "illegalContent" for testing the illegalContent</font>
+		<form action="addblock" method='post'>
+			<input type='hidden' name='user' value='admin' /> <input
+				type='hidden' name='type' th:value='${type}' />
+			<textarea name="vac" rows="3" cols="20"></textarea>
+			<br /> <input type="submit" value="Add New Block" />
+		</form>
 	</div>
 	<div th:if=" ${type} == 'value'">
-		<font size="3">Value is calculated automatically, unable to add by manually.</font>
+		<font size="3">Value is calculated automatically, unable to add
+			by manually.</font>
 	</div>
 	<div th:if=" ${type} == 'bank'">
-		<font size="3">Bank record is add by bank transaction account automatically, unable to add by manually.</font>
+		<font size="3">Bank record is add by bank transaction account
+			automatically, unable to add by manually.</font>
 	</div>
 	<div th:if=" ${type} == 'cdo'">
 		<div th:if=" ${cdo} != null">
-			<div th:if=" ${cdo.cdos} != null">
-				<span th:text="${cdo.cdos.name}"></span>
-				<a th:href="@{'javascript:document.'+${cdo.cdos.name}+'Form.submit();'}">View Details</a>
-				<form th:attr="name=${cdo.cdos.name}+Form" action='/adminview' method='post'>
-				<input type='hidden' name='user' value='admin' />
-				<input type ='hidden' name='type' value='cdos' />
-				<input type='hidden' name='product' th:value='${cdo.cdos.name}' />
-			</form>
+			<div th:if=" ${cdo.cdos} != null" >
+				<font size="3">This CDO is belong to follow CDOs</font><br />
+				<div style="margin-left:30px;">
+				 <span
+					th:text="${cdo.cdos.name}"></span> <a
+					th:href="@{'javascript:document.'+${cdo.cdos.name}+'Form.submit();'}">View
+					Details</a>
+				<form th:attr="name=${cdo.cdos.name}+Form" action='/adminview'
+					method='post'>
+					<input type='hidden' name='user' value='admin' /> <input
+						type='hidden' name='type' value='cdos' /> <input type='hidden'
+						name='product' th:value='${cdo.cdos.name}' />
+				</form>
+				</div>
 			</div>
-			<div th:if=" ${cdo.cdos} == null">
-				This CDO is not belong to any CDOs
+			<div th:if=" ${cdo.cdos} == null">This CDO is not belong to any
+				CDOs</div>
+			<br />
+			<div th:if=" ${cdo.abs} != null">
+				This CDO contains following ABS product(s):
+				<div th:each="absproduct:${cdo.abs}" style="margin-left:30px;">
+					 <span th:text="${absproduct.value.name}"></span>
+					 <a th:if="${absproduct.value.link}!=null" th:href="@{${absproduct.value.link}}">View Details</a>
+					 <span th:if="${absproduct.value.link}==null">（Faked product, no link provided）</span>
+				</div>
 			</div>
-		</div>
-		<div th:if=" ${cdo.abs} != null">
-			This CDO contains following ABS product(s):
-			<div th:each="abs:${cdo.abs}">
-				
+			<div th:if=" ${cdo.abs} == null">
+				<font size="3" color="red">ABSs' Data missed, please contact admin.</font>
 			</div>
-		</div>
-		<div th:if=" ${cdo.abs} == null">
-			<font size="3" color="red">Data missed, please contact admin.</font>
 		</div>
 	</div>
+	
 	<div th:if=" ${type} == 'cdos'">
 		<div th:if=" ${cdos} != null">
-			
+			<div th:if=" ${cdos.cdo} != null">
+				<font size="3">This CDOs contians follow CDO(s)</font><br />
+				<div th:each="cdoproduct:${cdos.cdo}" style="margin-left:30px;">
+					<span th:text="${cdoproduct.value.name}"></span>
+					 <a th:if="${cdoproduct.value.link}!=null" th:href="@{'javascript:document.'+${cdoproduct.value.name}+'Form.submit();'}">View Details</a>
+					 <span th:if="${cdoproduct.value.link}==null">（Faked product, no link provided）</span>
+					 <form th:attr="name=${cdoproduct.value.name}+Form" action='/adminview' method='post'>
+						<input type='hidden' name='user' value='admin' />
+						<input type='hidden' name='type' value='cdo' />
+						<input type='hidden' name='product' th:value='${cdoproduct.value.name}' />
+					</form>
+					<div th:if=" ${cdoproduct.value.abs} != null"  style="margin-left:30px;">
+						<font size="3">This CDO contains following ABS product(s):</font>
+						<div th:each="absproduct:${cdoproduct.value.abs}" style="margin-left:10px;">
+					 	<span th:text="${absproduct.value.name}"></span>
+					 	<a th:if="${absproduct.value.link}!=null" th:href="@{${absproduct.value.link}}">View Details</a>
+					 	<span th:if="${absproduct.value.link}==null">（Faked product, no link provided）</span>
+					</div>
+					</div>
+					<div th:if=" ${cdoproduct.value.abs} == null">
+						<font size="3" color="red">ABSs' Data missed, please contact admin.</font>
+					</div>
+					<br/>
+				</div>
+			</div>
+			<div th:if=" ${cdos.cdo} == null">
+				<font size="3">No CDO(s) data found, maybe data missed</font><br />
+			</div>
+
 		</div>
 		<div th:if=" ${cdos} == null">
 			<font size="3" color="red">Data missed, please contact admin.</font>

@@ -7,14 +7,14 @@ import net.matthew.Static_Value;
 public class CDOs {
 	String name;
 	String link;
-	public HashMap<String, CDO> CDO;
+	public HashMap<String, CDO> cdo;
 
-	public HashMap<String, CDO> getCDO() {
-		return CDO;
+	public HashMap<String, CDO> getCdo() {
+		return cdo;
 	}
 
-	public void setCDO(HashMap<String, CDO> cDO) {
-		CDO = cDO;
+	public void setCdo(HashMap<String, CDO> cDO) {
+		cdo = cDO;
 	}
 
 	public String getName() {

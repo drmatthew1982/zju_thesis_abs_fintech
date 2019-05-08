@@ -1,7 +1,5 @@
 package net.matthew.app.data;
 
-import net.matthew.Static_Value;
-
 public class ABS {
 	public String name;
 	public String link;

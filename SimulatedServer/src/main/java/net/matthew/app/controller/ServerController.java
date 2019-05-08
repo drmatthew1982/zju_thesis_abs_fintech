@@ -90,7 +90,7 @@ public class ServerController {
 			faked_ABS_B.setName("faked_ABS_B");
 
 			ABS faked_ABS_C = new ABS();
-			faked_ABS_B.setName("faked_ABS_C");
+			faked_ABS_C.setName("faked_ABS_C");
 
 			HashMap absmap = new HashMap();
 			absmap.put("abs_a", abs);
@@ -119,7 +119,7 @@ public class ServerController {
 			faked_ABS_B.setName("faked_ABS_B");
 
 			ABS faked_ABS_C = new ABS();
-			faked_ABS_B.setName("faked_ABS_C");
+			faked_ABS_C.setName("faked_ABS_C");
 
 			HashMap<String,ABS> absmap = new HashMap<String,ABS>();
 			absmap.put("abs_a", abs);
@@ -145,6 +145,7 @@ public class ServerController {
 			HashMap<String, CDO> cdomap=new HashMap<String, CDO>();
 			cdomap.put("CDO_A", cdo);
 			cdomap.put("Faked_CDO_B", faked_cdo_B);
+			RETURNED_CDOS.setCdo(cdomap);
 		}
 		return RETURNED_CDOS;
 	}
