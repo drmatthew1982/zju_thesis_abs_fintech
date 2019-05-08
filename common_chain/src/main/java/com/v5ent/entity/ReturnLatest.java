@@ -8,6 +8,7 @@ public class ReturnLatest {
 	Block reputation;
 	Block value;
 	Block bank;
+	Block rank;
 	ABS abs;
 	boolean transferToWrongAccount;
 	public String getCode() {
@@ -51,6 +52,12 @@ public class ReturnLatest {
 	}
 	public void setAbs(ABS abs) {
 		this.abs = abs;
+	}
+	public Block getRank() {
+		return rank;
+	}
+	public void setRank(Block rank) {
+		this.rank = rank;
 	}
 
 }

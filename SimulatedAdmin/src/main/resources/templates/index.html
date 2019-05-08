@@ -44,13 +44,12 @@
 		<div th:if="${remoteDebt}!=null">
 			<font size="3">Real DEBT is:<span th:text="${remoteDebt}"></span>
 			</font>
-
 		</div>
 		<div th:if="${remoteDebt gt debt}">
 			<font size="3" color='red'>Warning: Real DBET is Great than
 				target Value</font>
 		</div>
-		<div th:if="!${remoteDebt gt debt} and ${Debt}!=null" >
+		<div th:if="!${remoteDebt gt debt} and ${Debt}!=null">
 			<font size="3" color='green'>Real DBET is less than or equals
 				as target Value</font>
 		</div>
@@ -87,7 +86,7 @@
 			<td><span th:text="${returnObject.capital.hash}"></span></td>
 			<td><span th:text="${returnObject.capital.timestamp}"></span></td>
 			<td><span th:text="${returnObject.capital.comments}"></span></td>
-			<td><a href="javascript:document.capitalChianForm.submit();">View
+			<td><a href="javascript:document.capitalChainForm.submit();">View
 					History</a></td>
 		</tr>
 		<tr>
@@ -97,7 +96,7 @@
 			<td><span th:text="${returnObject.reputation.hash}"></span></td>
 			<td><span th:text="${returnObject.reputation.timestamp}"></span></td>
 			<td><span th:text="${returnObject.reputation.comments}"></span></td>
-			<td><a href="javascript:document.reputationChianForm.submit();">View
+			<td><a href="javascript:document.reputationChainForm.submit();">View
 					History</a></td>
 		</tr>
 		<tr>
@@ -107,7 +106,7 @@
 			<td><span th:text="${returnObject.value.hash}"></span></td>
 			<td><span th:text="${returnObject.value.timestamp}"></span></td>
 			<td><span th:text="${returnObject.value.comments}"></span></td>
-			<td><a href="javascript:document.valueChianForm.submit();">Value
+			<td><a href="javascript:document.valueChainForm.submit();">View
 					History</a></td>
 		</tr>
 		<tr>
@@ -117,30 +116,70 @@
 			<td><span th:text="${returnObject.bank.hash}"></span></td>
 			<td><span th:text="${returnObject.bank.timestamp}"></span></td>
 			<td><span th:text="${returnObject.bank.comments}"></span></td>
-			<td><a href="javascript:document.bankChianForm.submit();">Value
+			<td><a href="javascript:document.bankChainForm.submit();">View
+					History</a></td>
+		</tr>
+		<tr>
+			<td>Rank Chain</td>
+			<td><span th:text="${returnObject.rank.index}"></span></td>
+			<td><span th:text="${returnObject.rank.vac}"></span></td>
+			<td><span th:text="${returnObject.rank.hash}"></span></td>
+			<td><span th:text="${returnObject.rank.timestamp}"></span></td>
+			<td><span th:text="${returnObject.rank.comments}"></span></td>
+			<td><a href="javascript:document.rankChainForm.submit();">View
 					History</a></td>
 		</tr>
 	</table>
-	<form name='capitalChianForm' action='adminview' method='post'>
+	<form name='capitalChainForm' action='adminview' method='post'>
 		<input type='hidden' name='user' value='admin' /> <input
 			type='hidden' name='type' value='capital' /> <input type='hidden'
 			name='product' th:value='${returnObject.code}' />
 	</form>
-	<form name='reputationChianForm' action='adminview' method='post'>
+	<form name='reputationChainForm' action='adminview' method='post'>
 		<input type='hidden' name='user' value='admin' /> <input
 			type='hidden' name='type' value='reputation' /> <input type='hidden'
 			name='product' th:value='${returnObject.code}' />
 	</form>
-	<form name='valueChianForm' action='adminview' method='post'>
+	<form name='valueChainForm' action='adminview' method='post'>
 		<input type='hidden' name='user' value='admin' /> <input
 			type='hidden' name='type' value='value' /> <input type='hidden'
 			name='product' th:value='${returnObject.code}' />
 	</form>
-	<form name='bankChianForm' action='adminview' method='post'>
+	<form name='bankChainForm' action='adminview' method='post'>
 		<input type='hidden' name='user' value='admin' /> <input
 			type='hidden' name='type' value='bank' /> <input type='hidden'
 			name='product' th:value='${returnObject.code}' />
 	</form>
+	<form name='rankChainForm' action='adminview' method='post'>
+		<input type='hidden' name='user' value='admin' /> <input
+			type='hidden' name='type' value='rank' /> <input type='hidden'
+			name='product' th:value='${returnObject.code}' />
+	</form>
+
+	<div th:if="${returnObject.abs}!=null">
+		<div th:if="${returnObject.abs.cdo}!=null">
+			<font size="3">This ABS belong to CDO:<span
+				th:text="${returnObject.abs.cdo.name}"></span></font> <a
+				href="javascript:document.cdoChainForm.submit();">View Details</a>
+			<form name='cdoChainForm' action='adminview' method='post'>
+				<input type='hidden' name='user' value='admin' />
+				<input type ='hidden' name='type' value='cdo' />
+				<input type='hidden' name='product'
+					th:value='${returnObject.abs.cdo.name}' />
+			</form>
+		</div>
+		<div th:if="${returnObject.abs.cdos}!=null">
+			<font size="3">This ABS belong to CDOs:<span
+				th:text="${returnObject.abs.cdos.name}"></span></font> <a
+				href="javascript:document.cdosChainForm.submit();">View Details</a>
+			<form name='cdosChainForm' action='adminview' method='post'>
+				<input type='hidden' name='user' value='admin' />
+				<input type ='hidden' name='type' value='cdos' />
+				<input type='hidden' name='product'
+					th:value='${returnObject.abs.cdos.name}' />
+			</form>
+		</div>
+	</div>
 
 </body>
 </html>

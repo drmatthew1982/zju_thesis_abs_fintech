@@ -65,12 +65,12 @@ public class ServerController {
 
 			CDO cdo = new CDO();
 			cdo.setName("CDO_A");
-			cdo.setLink(Static_Value.HTTP + Static_Value.ABS_A_MASTER_CHAIN_DOMAIN + ":8082/cdo");
+			cdo.setLink(Static_Value.HTTP + Static_Value.ABS_A_MASTER_CHAIN_DOMAIN + ":8082/adminview");
 			RETURNED_ABS.setCdo(cdo);
 
 			CDOs cdos = new CDOs();
 			cdos.setName("CDOs_A");
-			cdos.setLink("Static_Value.HTTP+Static_Value.ABS_A_MASTER_CHAIN_DOMAIN+\":8082/cdos");
+			cdos.setLink("Static_Value.HTTP+Static_Value.ABS_A_MASTER_CHAIN_DOMAIN+\":8082/adminview");
 			RETURNED_ABS.setCdos(cdos);
 		}
 		return RETURNED_ABS;
@@ -80,7 +80,7 @@ public class ServerController {
 		if (RETURNED_CDO == null) {
 			RETURNED_CDO = new CDO();
 			RETURNED_CDO.setName("CDO_A");
-			RETURNED_CDO.setLink(Static_Value.HTTP + Static_Value.ABS_A_MASTER_CHAIN_DOMAIN + ":8082/cdo");
+			RETURNED_CDO.setLink(Static_Value.HTTP + Static_Value.ABS_A_MASTER_CHAIN_DOMAIN + ":8082/adminview");
 
 			ABS abs = new ABS();
 			abs.setName("abs_a");
@@ -97,6 +97,10 @@ public class ServerController {
 			absmap.put("faked_ABS_B", faked_ABS_B);
 			absmap.put("faked_ABS_C", faked_ABS_C);
 			RETURNED_CDO.setAbs(absmap);
+			CDOs CDOs = new CDOs();
+			CDOs.setName("CDOs_A");
+			CDOs.setLink(Static_Value.HTTP+Static_Value.ABS_A_MASTER_CHAIN_DOMAIN+":8082/adminview");
+			RETURNED_CDO.setCdos(CDOs);
 		}
 		return RETURNED_CDO;
 	}
@@ -105,7 +109,7 @@ public class ServerController {
 		if (RETURNED_CDOS == null) {
 			RETURNED_CDOS = new CDOs();
 			RETURNED_CDOS.setName("CDOs_A");
-			RETURNED_CDOS.setLink("Static_Value.HTTP+Static_Value.ABS_A_MASTER_CHAIN_DOMAIN+\":8082/cdos");
+			RETURNED_CDOS.setLink(Static_Value.HTTP+Static_Value.ABS_A_MASTER_CHAIN_DOMAIN+":8082/adminview");
 			
 			ABS abs = new ABS();
 			abs.setName("abs_a");
@@ -162,14 +166,13 @@ public class ServerController {
 		}
 
 		String type = request.getParameter("type");
-
 		List<Block> chain = getAllBlock(type, isAdmin);
 		WrappedChain wrappedChain = new WrappedChain();
 		if (type.equals(Static_Value.TYPE_CDO)) {
-			wrappedChain.setCdo(RETURNED_CDO);
+			wrappedChain.setCdo(getCDO());
 		}
 		if (type.equals(Static_Value.TYPE_CDOS)) {
-			wrappedChain.setCdos(RETURNED_CDOS);
+			wrappedChain.setCdos(getCdos());
 		}
 		wrappedChain.setChain(chain);
 		return gson.toJson(wrappedChain);
@@ -242,6 +245,15 @@ public class ServerController {
 		if (Static_Value.TYPE_BANK.equals(type)) {
 			port = Static_Value.ABS_A_BANK_CHAIN_PORT;
 		}
+		if (Static_Value.TYPE_RANK.equals(type)) {
+			port = Static_Value.ABS_A_RANK_CHAIN_PORT;
+		}
+		if (Static_Value.TYPE_CDO.equals(type)) {
+			port = Static_Value.ABS_A_CDO_CHAIN_PORT;
+		}
+		if (Static_Value.TYPE_CDOS.equals(type)) {
+			port = Static_Value.ABS_A_CDOS_CHAIN_PORT;
+		}
 		return port;
 	}
 
@@ -298,6 +310,8 @@ public class ServerController {
 					Static_Value.ABS_A_VALUE_CHAIN_PORT, Static_Value.ABS_GET_LAST_METHOD, isAdmin);
 			Block bankBlock = getGetValue(Static_Value.HTTP + Static_Value.ABS_A_BANK_CHAIN_DOMAIN,
 					Static_Value.ABS_A_BANK_CHAIN_PORT, Static_Value.ABS_GET_LAST_METHOD, isAdmin);
+			Block rankBlock = getGetValue(Static_Value.HTTP + Static_Value.ABS_A_RANK_CHAIN_DOMAIN,
+					Static_Value.ABS_A_RANK_CHAIN_PORT, Static_Value.ABS_GET_LAST_METHOD, isAdmin);
 			List<Block> chain = getAllBlock(Static_Value.TYPE_BANK, isAdmin);
 			for (Block block : chain) {
 				String vac = block.getVac();
@@ -313,6 +327,7 @@ public class ServerController {
 			returnObject.setReputation(productReputationBlock);
 			returnObject.setValue(valueBlock);
 			returnObject.setBank(bankBlock);
+			returnObject.setRank(rankBlock);
 			returnObject.setTransferToWrongAccount(isTransferToWrongAccount);
 			returnObject.setAbs(getAbs());
 			// returnObject.set
@@ -365,6 +380,7 @@ public class ServerController {
 	List<Block> getAllValue(String url, int port, String method, boolean isAdmin) {
 		HttpGet httpGet = new HttpGet(url + ":" + port + "/" + method);
 		try {
+			//logger.info("==:"+url+"=="+port);
 			HttpResponse response = client.execute(httpGet);
 			response.addHeader("content-type", "application/json");
 			HttpEntity entity = response.getEntity();

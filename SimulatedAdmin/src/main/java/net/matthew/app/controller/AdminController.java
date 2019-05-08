@@ -190,6 +190,12 @@ public class AdminController {
 			modelAndView.addObject("returnObject", returnObject);
 			modelAndView.addObject("type", type);
 			modelAndView.addObject("productcode", productcode);
+			if(type.equals(Static_Value.TYPE_CDO)) {
+				modelAndView.addObject("cdo",wrappedChain.getCdo());
+			}
+			if(type.equals(Static_Value.TYPE_CDOS)) {
+				modelAndView.addObject("cdos",wrappedChain.getCdos());
+			}
 			return modelAndView;
 		} catch (ClientProtocolException e) {
 			// TODO Auto-generated catch block

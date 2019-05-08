@@ -16,7 +16,7 @@ public class Static_Value {
 	public static String ABS_A_CDOS_CHAIN_DOMAIN="localhost";
 	public static int ABS_A_CDOS_CHAIN_PORT=4573;
 	public static String ABS_A_RANK_CHAIN_DOMAIN="localhost";
-	public static int ABS_A_RANK_PORT=4574;
+	public static int ABS_A_RANK_CHAIN_PORT=4574;
 	public static String ABS_GET_DEFAULT_METHOD="";
 	public static String ABS_GET_ALL_METHOD="all";
 	public static String ABS_GET_LAST_METHOD="getlast";
