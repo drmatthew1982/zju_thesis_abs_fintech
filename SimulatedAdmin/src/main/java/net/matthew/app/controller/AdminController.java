@@ -103,11 +103,12 @@ public class AdminController {
 		String vac = "Rank:"+ rankAndReason[0] + ",Reason:"+rankAndReason[1];
 		try {
 			String returned = addBlock(httpPost, "SYSTEM", type, vac,rankAndReason[0]);
-			ModelAndView modelAndView = returnIndexValue();
-			if (DEBT != null && ROE != null) {
-				appendDebtandRoe(modelAndView, httprequest, httpresponse);
-			}
-			//modelAndView.setViewName("redirect:/");
+//			ModelAndView modelAndView = returnIndexValue();
+//			if (DEBT != null && ROE != null) {
+//				appendDebtandRoe(modelAndView, httprequest, httpresponse);
+//			}
+			ModelAndView modelAndView=new ModelAndView();
+			modelAndView.setViewName("redirect:/");
 			return modelAndView;
 		} catch (ClientProtocolException e) {
 			// TODO Auto-generated catch block
@@ -135,21 +136,22 @@ public class AdminController {
 	String[] checkRankAndReason(String remoteDebt, String remoteRoe) {
 		String rank="Unranked";
 		String reason="Unknow";
-		if(Integer.parseInt(remoteDebt)<Integer.parseInt(DEBT)&&Integer.parseInt(remoteRoe)>Integer.parseInt(ROE)) {
+		if((Integer.parseInt(remoteDebt)<Integer.parseInt(DEBT)||Integer.parseInt(remoteDebt)==Integer.parseInt(DEBT))&&
+				(Integer.parseInt(remoteRoe)>Integer.parseInt(ROE))||Integer.parseInt(remoteRoe)==Integer.parseInt(ROE)) {
 			rank="AAA";
-			reason="Real DEBT:"+remoteDebt+ " < Target DEBT:"+ DEBT+", and Real ROE:"+remoteRoe+" > Target ROE:"+ROE ;
+			reason="Real DEBT:"+remoteDebt+ " <= Target DEBT:"+ DEBT+", and Real ROE:"+remoteRoe+" >= Target ROE:"+ROE ;
 		}
 		if(Integer.parseInt(remoteDebt)>Integer.parseInt(DEBT)&&Integer.parseInt(remoteRoe)<Integer.parseInt(ROE)) {
 			rank="B";
 			reason="Real DEBT:"+remoteDebt+ " > Target DEBT:"+ DEBT+", and Real ROE:"+remoteRoe+" < Target ROE:"+ROE ;
 		}
-		if(Integer.parseInt(remoteDebt)>Integer.parseInt(DEBT)&&Integer.parseInt(remoteRoe)>Integer.parseInt(ROE)) {
+		if(Integer.parseInt(remoteDebt)>Integer.parseInt(DEBT)&&(Integer.parseInt(remoteRoe)>Integer.parseInt(ROE))||Integer.parseInt(remoteRoe)==Integer.parseInt(ROE)) {
 			rank="A";
-			reason="Real DEBT:"+remoteDebt+ " > Target DEBT:"+ DEBT+", and Real ROE:"+remoteRoe+" > Target ROE:"+ROE ;
+			reason="Real DEBT:"+remoteDebt+ " > Target DEBT:"+ DEBT+", and Real ROE:"+remoteRoe+" >= Target ROE:"+ROE ;
 		}
-		if(Integer.parseInt(remoteDebt)<Integer.parseInt(DEBT)&&Integer.parseInt(remoteRoe)<Integer.parseInt(ROE)) {
+		if((Integer.parseInt(remoteDebt)<Integer.parseInt(DEBT)||Integer.parseInt(remoteDebt)==Integer.parseInt(DEBT))&&Integer.parseInt(remoteRoe)<Integer.parseInt(ROE)) {
 			rank="AA";
-			reason="Real DEBT:"+remoteDebt+ " < Target DEBT:"+ DEBT+", and Real ROE:"+remoteRoe+" < Target ROE:"+ROE ;
+			reason="Real DEBT:"+remoteDebt+ " <= Target DEBT:"+ DEBT+", and Real ROE:"+remoteRoe+" < Target ROE:"+ROE ;
 		}
 		return new String[] {rank,reason};
 	}
