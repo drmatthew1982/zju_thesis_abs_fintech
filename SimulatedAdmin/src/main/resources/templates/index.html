@@ -69,6 +69,14 @@
 
 		<br /> <input type="submit" value="submit or update" />
 	</form>
+	<div th:if=" ${debt}!=null and ${roe}!=null">
+	<form name='form' action='/updaterank' method='post'>
+		<input type='hidden' name='user' value='admin' /> <input
+			type='hidden' name='type' value='rank' /> <input type='hidden'
+			name='product' th:value='${returnObject.code}' />
+		<input type="submit" value="Update Rank" />
+	</form>
+	</div>
 	<table border="1">
 		<tr>
 			<th>Chain Name</th>

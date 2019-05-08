@@ -42,11 +42,15 @@ public class AdminController {
 	public static final String API_URL_GETLATEST = "http://localhost:8080/getlatest";
 	public static final String API_URL_GETALL = "http://localhost:8080/getAll";
 	public static final String API_URL_ADDBLOCK = "http://localhost:8080/addBlock";
+	public static final String API_URL_ADDRANKBLOCK = "http://localhost:8080/addRankBlock";
 	public static final String API_URL_GET_REMOTE_DEBT_AND_ROE = "http://localhost:8084/getDebtAndRoe";
 	public static String DEBT = null;
 	public static String ROE = null;
+	public static boolean CHANGED = false;
+	public int debt_difference = 0;
+	public int roe_difference = 0;
 
-	private static DefaultHttpClient client = new DefaultHttpClient();
+	
 
 	final Gson gson = new GsonBuilder().setPrettyPrinting().create();
 	ModelAndView errorModelAndView = new ModelAndView();
@@ -55,8 +59,8 @@ public class AdminController {
 	@ResponseBody
 	ModelAndView home(HttpServletRequest httprequest, HttpServletResponse httpresponse) {
 		ModelAndView modelAndView = returnIndexValue();
-		if(DEBT!=null&&ROE!=null) {
-			appendDebtandRoe(modelAndView,httprequest,httpresponse);
+		if (DEBT != null && ROE != null) {
+			appendDebtandRoe(modelAndView, httprequest, httpresponse);
 		}
 		return modelAndView;
 
@@ -70,27 +74,93 @@ public class AdminController {
 		DEBT = targetdebt;
 		ROE = targetroe;
 		ModelAndView modelAndView = returnIndexValue();
-		appendDebtandRoe(modelAndView,httprequest,httpresponse);
+		appendDebtandRoe(modelAndView, httprequest, httpresponse);
 		return modelAndView;
 	}
-	void appendDebtandRoe(ModelAndView modelAndView,HttpServletRequest httprequest, HttpServletResponse httpresponse) {
-		modelAndView.addObject("debt",DEBT);
-		modelAndView.addObject("ROE",ROE);
-		String remoteDebtAndRoe=getRemoteDebtAndRoe(httprequest,httpresponse);
-		String[] debtAndRoe=remoteDebtAndRoe.split(",");
+
+	void appendDebtandRoe(ModelAndView modelAndView, HttpServletRequest httprequest, HttpServletResponse httpresponse) {
+		modelAndView.addObject("debt", DEBT);
+		modelAndView.addObject("ROE", ROE);
+		String remoteDebtAndRoe = getRemoteDebtAndRoe(httprequest, httpresponse);
+		String[] debtAndRoe = remoteDebtAndRoe.split(",");
 		String debt = debtAndRoe[0];
 		String roe = debtAndRoe[1];
-		modelAndView.addObject("remoteDebt",debt);
-		modelAndView.addObject("remoteRoe",roe);
+		modelAndView.addObject("remoteDebt", debt);
+		modelAndView.addObject("remoteRoe", roe);
 	}
 	
+	@RequestMapping(value = "/updaterank", method = RequestMethod.POST)
+	@ResponseBody
+	ModelAndView updateRank(HttpServletRequest httprequest, HttpServletResponse httpresponse) {
+		HttpPost httpPost = null;
+		//String username = httprequest.getParameter("user");
+		String type = httprequest.getParameter("type");
+		String remoteDebtAndRoe = getRemoteDebtAndRoe(httprequest, httpresponse);
+		String[] debtAndRoe = remoteDebtAndRoe.split(",");
+		String debt = debtAndRoe[0];
+		String roe = debtAndRoe[1];
+		String[] rankAndReason = checkRankAndReason(debt,roe);
+		String vac = "Rank:"+ rankAndReason[0] + ",Reason:"+rankAndReason[1];
+		try {
+			String returned = addBlock(httpPost, "SYSTEM", type, vac,rankAndReason[0]);
+			ModelAndView modelAndView = returnIndexValue();
+			if (DEBT != null && ROE != null) {
+				appendDebtandRoe(modelAndView, httprequest, httpresponse);
+			}
+			//modelAndView.setViewName("redirect:/");
+			return modelAndView;
+		} catch (ClientProtocolException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			errorModelAndView.setViewName("error");
+			return errorModelAndView;
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			errorModelAndView.setViewName("error");
+			return errorModelAndView;
+		} catch (URISyntaxException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			errorModelAndView.setViewName("error");
+			return errorModelAndView;
+		} finally {
+			if (httpPost != null) {
+				httpPost.releaseConnection();
+			}
+		}
 
+	}
+	
+	String[] checkRankAndReason(String remoteDebt, String remoteRoe) {
+		String rank="Unranked";
+		String reason="Unknow";
+		if(Integer.parseInt(remoteDebt)<Integer.parseInt(DEBT)&&Integer.parseInt(remoteRoe)>Integer.parseInt(ROE)) {
+			rank="AAA";
+			reason="Real DEBT:"+remoteDebt+ " < Target DEBT:"+ DEBT+", and Real ROE:"+remoteRoe+" > Target ROE:"+ROE ;
+		}
+		if(Integer.parseInt(remoteDebt)>Integer.parseInt(DEBT)&&Integer.parseInt(remoteRoe)<Integer.parseInt(ROE)) {
+			rank="B";
+			reason="Real DEBT:"+remoteDebt+ " > Target DEBT:"+ DEBT+", and Real ROE:"+remoteRoe+" < Target ROE:"+ROE ;
+		}
+		if(Integer.parseInt(remoteDebt)>Integer.parseInt(DEBT)&&Integer.parseInt(remoteRoe)>Integer.parseInt(ROE)) {
+			rank="A";
+			reason="Real DEBT:"+remoteDebt+ " > Target DEBT:"+ DEBT+", and Real ROE:"+remoteRoe+" > Target ROE:"+ROE ;
+		}
+		if(Integer.parseInt(remoteDebt)<Integer.parseInt(DEBT)&&Integer.parseInt(remoteRoe)<Integer.parseInt(ROE)) {
+			rank="AA";
+			reason="Real DEBT:"+remoteDebt+ " < Target DEBT:"+ DEBT+", and Real ROE:"+remoteRoe+" < Target ROE:"+ROE ;
+		}
+		return new String[] {rank,reason};
+	}
 	String getRemoteDebtAndRoe(HttpServletRequest httprequest, HttpServletResponse httpresponse) {
 		HttpGet httpGet = null;
 		HttpResponse response;
+		DefaultHttpClient client = new DefaultHttpClient();
 		try {
 			URIBuilder uriBuilder = new URIBuilder(API_URL_GET_REMOTE_DEBT_AND_ROE);
 			httpGet = new HttpGet(uriBuilder.build());
+			
 			response = client.execute(httpGet);
 			HttpEntity entity = response.getEntity();
 			String result = EntityUtils.toString(entity);
@@ -114,6 +184,7 @@ public class AdminController {
 			list.add(param1);
 			uriBuilder.addParameters(list);
 			httpGet = new HttpGet(uriBuilder.build());
+			DefaultHttpClient client = new DefaultHttpClient();
 			HttpResponse response = client.execute(httpGet);
 			response.addHeader("content-type", "application/json");
 			HttpEntity entity = response.getEntity();
@@ -166,12 +237,14 @@ public class AdminController {
 			list.add(param3);
 			uriBuilder.addParameters(list);
 			httpGet = new HttpGet(uriBuilder.build());
+			DefaultHttpClient client = new DefaultHttpClient();
 			HttpResponse response = client.execute(httpGet);
 			response.addHeader("content-type", "application/json");
 			HttpEntity entity = response.getEntity();
 			String string = EntityUtils.toString(entity);
-			WrappedChain wrappedChain = gson.fromJson(string, new TypeToken<WrappedChain>() {}.getType());
-			List<Block> returnObject=wrappedChain.getChain();
+			WrappedChain wrappedChain = gson.fromJson(string, new TypeToken<WrappedChain>() {
+			}.getType());
+			List<Block> returnObject = wrappedChain.getChain();
 			for (Block block : returnObject) {
 				String vac = block.getVac();
 				if (vac.contains("illegalContent")) {
@@ -180,7 +253,7 @@ public class AdminController {
 				}
 			}
 			for (Block block : returnObject) {
-				String vac =block.getVac();
+				String vac = block.getVac();
 				if (vac.startsWith("Out") && !vac.endsWith("10000")) {
 					block.setComments("Wrong Transaction is detected.");
 				}
@@ -190,11 +263,11 @@ public class AdminController {
 			modelAndView.addObject("returnObject", returnObject);
 			modelAndView.addObject("type", type);
 			modelAndView.addObject("productcode", productcode);
-			if(type.equals(Static_Value.TYPE_CDO)) {
-				modelAndView.addObject("cdo",wrappedChain.getCdo());
+			if (type.equals(Static_Value.TYPE_CDO)) {
+				modelAndView.addObject("cdo", wrappedChain.getCdo());
 			}
-			if(type.equals(Static_Value.TYPE_CDOS)) {
-				modelAndView.addObject("cdos",wrappedChain.getCdos());
+			if (type.equals(Static_Value.TYPE_CDOS)) {
+				modelAndView.addObject("cdos", wrappedChain.getCdos());
 			}
 			return modelAndView;
 		} catch (ClientProtocolException e) {
@@ -220,26 +293,17 @@ public class AdminController {
 	@ResponseBody
 	ModelAndView addblock(HttpServletRequest httprequest, HttpServletResponse httpresponse) {
 		HttpPost httpPost = null;
-		String username = httprequest.getParameter("user");
-		String type = httprequest.getParameter("type");
-		String vac = httprequest.getParameter("vac");
 		try {
-			URIBuilder uriBuilder = new URIBuilder(API_URL_ADDBLOCK);
-			List<NameValuePair> list = new LinkedList<>();
-			BasicNameValuePair param1 = new BasicNameValuePair("user", username);
-			BasicNameValuePair param2 = new BasicNameValuePair("type", type);
-			BasicNameValuePair param3 = new BasicNameValuePair("vac", vac);
-			list.add(param1);
-			list.add(param2);
-			list.add(param3);
-			uriBuilder.addParameters(list);
-			httpPost = new HttpPost(uriBuilder.build());
-			HttpResponse response = client.execute(httpPost);
-			response.addHeader("content-type", "application/json");
-			HttpEntity entity = response.getEntity();
-			String string = EntityUtils.toString(entity);
+			String username = httprequest.getParameter("user");
+			String type = httprequest.getParameter("type");
+			String vac = httprequest.getParameter("vac");
+			String returned = addBlock(httpPost, username, type, vac, null);
 			ModelAndView modelAndView = new ModelAndView();
+			
 			modelAndView.setViewName("redirect:/adminview");
+			if(type.equals(Static_Value.TYPE_RANK)) {
+				modelAndView.setViewName("redirect:/index");
+			}
 			// modelAndView.addObject("returnObject", returnObject);
 			modelAndView.addObject("type", type);
 			modelAndView.addObject("user", username);
@@ -262,6 +326,30 @@ public class AdminController {
 			}
 		}
 
+	}
+
+	String addBlock(HttpPost httpPost, String username, String type, String vac, String rank )
+			throws URISyntaxException, ClientProtocolException, IOException {
+		URIBuilder uriBuilder = new URIBuilder(API_URL_ADDBLOCK);
+		if(type.equals(Static_Value.TYPE_RANK)) {
+			uriBuilder = new URIBuilder(API_URL_ADDRANKBLOCK);
+		}
+		List<NameValuePair> list = new LinkedList<>();
+		BasicNameValuePair param1 = new BasicNameValuePair("user", username);
+		BasicNameValuePair param2 = new BasicNameValuePair("type", type);
+		BasicNameValuePair param3 = new BasicNameValuePair("vac", vac);
+		BasicNameValuePair param4 = new BasicNameValuePair("rank", rank);
+		list.add(param1);
+		list.add(param2);
+		list.add(param3);
+		list.add(param4);
+		uriBuilder.addParameters(list);
+		httpPost = new HttpPost(uriBuilder.build());
+		DefaultHttpClient client = new DefaultHttpClient();
+		HttpResponse response = client.execute(httpPost);
+		response.addHeader("content-type", "application/json");
+		HttpEntity entity = response.getEntity();
+		return EntityUtils.toString(entity);
 	}
 
 	@RequestMapping("/setValues")

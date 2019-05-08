@@ -2,6 +2,7 @@ package net.matthew.app.controller;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.net.URISyntaxException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -12,11 +13,14 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,10 +51,12 @@ import com.v5ent.entity.WrappedChain;
 
 @Controller
 public class ServerController {
+	public static final String API_URL_ADDRANKBLOCK = "http://localhost:8080/addRankBlock";
 
 	private final Logger logger = LoggerFactory.getLogger(getClass());
-	private static DefaultHttpClient client = new DefaultHttpClient();
+
 	private static Block errorblock = Block.createErrorBlock();
+	
 	final Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
 	private static ABS RETURNED_ABS;
@@ -70,7 +76,7 @@ public class ServerController {
 
 			CDOs cdos = new CDOs();
 			cdos.setName("CDOs_A");
-			cdos.setLink("Static_Value.HTTP+Static_Value.ABS_A_MASTER_CHAIN_DOMAIN+\":8082/adminview");
+			cdos.setLink(Static_Value.HTTP+Static_Value.ABS_A_MASTER_CHAIN_DOMAIN+":8082/adminview");
 			RETURNED_ABS.setCdos(cdos);
 		}
 		return RETURNED_ABS;
@@ -213,6 +219,38 @@ public class ServerController {
 		}
 		return gson.toJson(returnBlock);
 	}
+	
+	@RequestMapping("/addRankBlock")
+	@ResponseBody
+	String addRankBlock(HttpServletRequest request, HttpServletResponse response) {
+		HttpPost httpPost = null;
+		String productCode = request.getParameter("productCode");
+		String url = Static_Value.ABS_A_MASTER_CHAIN_DOMAIN;
+		int port = Static_Value.ABS_A_MASTER_CHAIN_PORT;
+		if (productCode == null || "".equals(productCode.trim())) {
+			productCode = "a";
+		}
+		String type = request.getParameter("type");
+		url = getUrl(type);
+		port = getPort(type);
+		String vac = request.getParameter("vac");
+		String name = request.getParameter("user");
+		String rank = request.getParameter("rank");
+		Block returnBlock = getPostValue(Static_Value.HTTP + url, port, Static_Value.ABS_DEFAULT_POST_METHOD, vac,
+				name);
+		// logger.info("Add type===:"+type);
+		if (type != null && (type.equals(Static_Value.TYPE_RANK))) {
+			String value = "Rank: "+rank+ ", Because ABS: ABS_"+productCode.toUpperCase()+" ranked as " +rank;
+			// logger.info("Add value===:"+value);
+			try {
+				addRankBlock( httpPost,  "AUTO_UPDATED", Static_Value.TYPE_CDO, value, rank,productCode);
+			} catch (URISyntaxException | IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return gson.toJson(returnBlock);
+	}
 
 	@RequestMapping("/caculateValue")
 	@ResponseBody
@@ -228,7 +266,7 @@ public class ServerController {
 		BigDecimal resultValue = BigDecimal.valueOf(captivalValue * 0.7).add(BigDecimal.valueOf(reputationValue * 0.3));
 		return String.valueOf(resultValue);
 	}
-
+	
 	private int getPort(String type) {
 		int port = Static_Value.ABS_A_MASTER_CHAIN_PORT;
 		if (type == null || "".equals(type.trim())) {
@@ -336,9 +374,10 @@ public class ServerController {
 		return gson.toJson(returnObject);
 	}
 
-	Block getGetValue(String url, int port, String method, boolean isAdmin) {
+	synchronized Block getGetValue(String url, int port, String method, boolean isAdmin) {
 		HttpGet httpGet = new HttpGet(url + ":" + port + "/" + method);
 		try {
+			DefaultHttpClient client = new DefaultHttpClient();
 			HttpResponse response = client.execute(httpGet);
 			response.addHeader("content-type", "application/json");
 			HttpEntity entity = response.getEntity();
@@ -382,6 +421,7 @@ public class ServerController {
 		HttpGet httpGet = new HttpGet(url + ":" + port + "/" + method);
 		try {
 			//logger.info("==:"+url+"=="+port);
+			DefaultHttpClient client = new DefaultHttpClient();
 			HttpResponse response = client.execute(httpGet);
 			response.addHeader("content-type", "application/json");
 			HttpEntity entity = response.getEntity();
@@ -417,6 +457,7 @@ public class ServerController {
 		httpPost.setEntity(postEntity);
 		// httpPost.setEntity(postEntity);
 		try {
+			DefaultHttpClient client = new DefaultHttpClient();
 			HttpResponse response = client.execute(httpPost);
 			response.addHeader("content-type", "application/json");
 			HttpEntity entity = response.getEntity();
@@ -437,6 +478,31 @@ public class ServerController {
 			}
 		}
 
+	}
+	String addRankBlock(HttpPost httpPost, String username, String type, String vac, String rank,String productCode )
+			throws URISyntaxException, ClientProtocolException, IOException {
+		URIBuilder uriBuilder = new URIBuilder(API_URL_ADDRANKBLOCK);
+		List<NameValuePair> list = new LinkedList<>();
+		BasicNameValuePair param1 = new BasicNameValuePair("user", username);
+		BasicNameValuePair param2 = new BasicNameValuePair("type", type);
+		BasicNameValuePair param3 = new BasicNameValuePair("vac", vac);
+		BasicNameValuePair param4 = new BasicNameValuePair("rank", rank);
+		list.add(param1);
+		list.add(param2);
+		list.add(param3);
+		list.add(param4);
+		uriBuilder.addParameters(list);
+		httpPost = new HttpPost(uriBuilder.build());
+		DefaultHttpClient client = new DefaultHttpClient();
+		HttpResponse response = client.execute(httpPost);
+		response.addHeader("content-type", "application/json");
+		HttpEntity entity = response.getEntity();
+		if(Static_Value.TYPE_CDO.equals(type)) {
+			String value = "Rank: "+rank+ ", Because CDO: CDO_"+productCode.toUpperCase()+" ranked as" +rank;
+			addRankBlock(new HttpPost(API_URL_ADDRANKBLOCK), username,Static_Value.TYPE_CDOS, value, rank,productCode);
+		}
+		httpPost.releaseConnection();
+		return EntityUtils.toString(entity);
 	}
 
 	private int letterToNumber(String letter) {
