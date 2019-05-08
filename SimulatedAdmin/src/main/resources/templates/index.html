@@ -170,8 +170,8 @@
 		</div>
 		<div th:if="${returnObject.abs.cdos}!=null">
 			<font size="3">This ABS belong to CDOs:<span
-				th:text="${returnObject.abs.cdos.name}"></span></font> <a
-				href="javascript:document.cdosChainForm.submit();">View Details</a>
+				th:text="${returnObject.abs.cdos.name}"></span></font> 
+				<a href="javascript:document.cdosChainForm.submit();">View Details</a>
 			<form name='cdosChainForm' action='adminview' method='post'>
 				<input type='hidden' name='user' value='admin' />
 				<input type ='hidden' name='type' value='cdos' />
