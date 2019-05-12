@@ -498,7 +498,7 @@ public class ServerController {
 		response.addHeader("content-type", "application/json");
 		HttpEntity entity = response.getEntity();
 		if(Static_Value.TYPE_CDO.equals(type)) {
-			String value = "Rank: "+rank+ ", Because CDO: CDO_"+productCode.toUpperCase()+" ranked as" +rank;
+			String value = "Rank: "+rank+ ", Because CDO: CDO_"+productCode.toUpperCase()+" ranked as " +rank;
 			addRankBlock(new HttpPost(API_URL_ADDRANKBLOCK), username,Static_Value.TYPE_CDOS, value, rank,productCode);
 		}
 		httpPost.releaseConnection();
