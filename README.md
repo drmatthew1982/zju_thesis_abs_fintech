@@ -5,7 +5,7 @@ This project is the design implementation part of the essay which for apply Mast
 ## Statement：
 
 This source code just to implement the design of the Essay:   
-"Fintech Design based on China Market’s ABS Risk Cases Analysis".     
+"Fintech Design based on China Market’s ABS Risk Cases Analysis and blockchain".     
 So it not follow the software engining rule in strict way, such as naming space,reusage pattern or avoid hard code. Do not use it in software engining lesson (or you want to teach some nagetive example).   
 And now it's only work for the localhost.   
 Warning: the data will lost after the applications restart because it's need simulated some senario in the essay. So do not expacted the data will be restore after restart.   
