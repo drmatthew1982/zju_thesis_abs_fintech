@@ -1,5 +1,10 @@
 package net.matthew.app.data;
-
+/**
+ * 
+ * @author matthew.yiqing.zhu/Zhu Yiqing  ZJU
+ * 
+ *
+ */
 public class ABS {
 	public String name;
 	public String link;

@@ -48,7 +48,12 @@ import net.matthew.app.data.CDOs;
 import com.v5ent.entity.Block;
 import com.v5ent.entity.ReturnLatest;
 import com.v5ent.entity.WrappedChain;
-
+/**
+ * 
+ * @author 浙大经济学院/朱 逸清
+ * 
+ *
+ */
 @Controller
 public class ServerController {
 	public static final String API_URL_ADDRANKBLOCK = "http://localhost:8080/addRankBlock";

@@ -35,7 +35,12 @@ import com.v5ent.entity.ReturnLatest;
 import com.v5ent.entity.WrappedChain;
 
 import net.matthew.Static_Value;
-
+/**
+ * 
+ * @author matthew.yiqing.zhu/Zhu 逸清  浙江大学
+ * 
+ *
+ */
 @Controller
 public class AdminController {
 	private final Logger logger = LoggerFactory.getLogger(getClass());

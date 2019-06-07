@@ -23,7 +23,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
-
+/**
+ * 
+ * @author matthew.yiqing.zhu/浙大经济学院 朱 逸清   
+ * 
+ *
+ */
 @Controller
 public class SimulatedAIController {
 	private final Logger logger = LoggerFactory.getLogger(getClass());

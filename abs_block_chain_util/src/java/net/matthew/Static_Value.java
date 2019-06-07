@@ -1,5 +1,10 @@
 package net.matthew;
-
+/**
+ * 
+ * @author matthew.yiqing.zhu/Zhu Yiqing  ZJU
+ * 
+ *
+ */
 public class Static_Value {
 	public static String ABS_A_MASTER_CHAIN_DOMAIN="localhost";
 	public static int ABS_A_MASTER_CHAIN_PORT=4567;

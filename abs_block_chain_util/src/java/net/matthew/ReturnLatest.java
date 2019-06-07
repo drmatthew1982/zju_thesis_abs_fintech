@@ -1,5 +1,10 @@
 package net.matthew;
-
+/**
+ * 
+ * @author matthew.yiqing.zhu/朱 逸清 ZJU
+ * 
+ *
+ */
 public class ReturnLatest {
 	String code;
 	String capital;

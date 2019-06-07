@@ -3,7 +3,13 @@ package com.v5ent.entity;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-
+/**
+ * 
+ * 
+ * 
+ *@author matthew.yiqing.zhu/Zhu Yiqing  浙江大学
+ * 
+ */
 /**
  * 区块
  */

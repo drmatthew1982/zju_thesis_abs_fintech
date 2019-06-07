@@ -1,7 +1,12 @@
 package com.v5ent.entity;
 
 import net.matthew.app.data.ABS;
-
+/**
+ * 
+ * @author matthew.yiqing.zhu/Zhu Yiqing  浙江大学
+ * 
+ *
+ */
 public class ReturnLatest {
 	String code;
 	Block capital;

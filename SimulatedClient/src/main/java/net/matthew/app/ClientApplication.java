@@ -6,7 +6,12 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
-
+/**
+ * 
+ * @author 浙大 朱逸清
+ * 
+ *
+ */
 @Configuration
 @EnableAutoConfiguration
 @ComponentScan

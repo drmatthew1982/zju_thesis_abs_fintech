@@ -1,5 +1,10 @@
 package com.v5ent.entity;
-
+/**
+ * 
+ * @author matthew.yiqing.zhu/Zhu Yiqing  ZJU
+ * 
+ *
+ */
 public class Message {
 	private String vac;
 	private String user;

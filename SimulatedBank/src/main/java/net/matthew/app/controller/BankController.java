@@ -36,7 +36,12 @@ import com.v5ent.entity.Block;
 import com.v5ent.entity.ReturnLatest;
 
 import net.matthew.Static_Value;
-
+/**
+ * 
+ * @author 浙-大-朱逸清
+ * 
+ *
+ */
 @Controller
 public class BankController {
 	private final Logger logger = LoggerFactory.getLogger(getClass());

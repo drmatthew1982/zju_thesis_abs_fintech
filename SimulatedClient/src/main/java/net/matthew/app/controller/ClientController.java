@@ -30,7 +30,12 @@ import com.google.gson.reflect.TypeToken;
 import com.v5ent.entity.Block;
 import com.v5ent.entity.ReturnLatest;
 import com.v5ent.entity.WrappedChain;
-
+/**
+ * 
+ * @author 浙江大学/朱 逸清
+ * 
+ *
+ */
 @Controller
 public class ClientController {
 	  public static String API_URL = "http://localhost:8080/getlatest";
