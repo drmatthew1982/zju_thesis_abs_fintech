@@ -3,7 +3,7 @@ package com.v5ent.entity;
 import net.matthew.app.data.ABS;
 /**
  * 
- * @author matthew.yiqing.zhu/Zhu Yiqing  浙江大学
+ * @author 浙江大学 基于国内市场资产证券化风险事件分析与区块链应用的金融科技设计
  * 
  *
  */

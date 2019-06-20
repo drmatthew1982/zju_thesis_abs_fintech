@@ -6,7 +6,7 @@ import static spark.Spark.port;
 import net.matthew.Static_Value;
 /**
  * 
- * @author matthew.yiqing.zhu/朱 逸 清 浙 江 大 学
+ * @author 浙 江 大 学 基于国内市场资产证券化风险事件分析与区块链应用的金融科技设计
  * 
  *
  */

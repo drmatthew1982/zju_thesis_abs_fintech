@@ -6,7 +6,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 /**
  * 
- * @author matthew.yiqing.zhu/朱 逸清   浙大经济学院
+ * @author 浙大 基于国内市场资产证券化风险事件分析与区块链应用的金融科技设计
  * 
  *
  */

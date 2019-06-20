@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Configuration;
 import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 /**
  * 
- * @author 浙大 朱逸清
+ * @author 浙大 基于国内市场资产证券化风险事件分析与区块链应用的金融科技设计
  * 
  *
  */

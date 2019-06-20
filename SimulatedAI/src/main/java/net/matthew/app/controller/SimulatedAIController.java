@@ -25,7 +25,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 /**
  * 
- * @author matthew.yiqing.zhu/浙大经济学院 朱 逸清   
+ * @author 基于国内市场资产证券化风险事件分析与区块链应用的金融科技设计 ZJU
+ *
  * 
  *
  */

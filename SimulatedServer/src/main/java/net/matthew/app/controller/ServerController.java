@@ -50,7 +50,7 @@ import com.v5ent.entity.ReturnLatest;
 import com.v5ent.entity.WrappedChain;
 /**
  * 
- * @author 浙大经济学院/朱 逸清
+ * @author 浙大 基于国内市场资产证券化风险事件分析与区块链应用的金融科技设计
  * 
  *
  */
