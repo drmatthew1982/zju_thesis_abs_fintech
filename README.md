@@ -11,7 +11,7 @@ So it not follow the software engining rule in strict way, such as naming space,
 And now it's only work for the localhost.   
 Warning: the data will lost after the applications restart because it's need simulated some senario in the essay. So do not expacted the data will be restore after restart.   
 The blockchain base part is refer to https://github.com/Mignet/blockchain and I do some changing on the code.  
-You can contact drmatthew1982@163.com if need some discussion.   
+You can contact if need some discussion.   
 
 ## Usage:
 
