@@ -1,4 +1,4 @@
-# essay_abs_fintech
+# zju_thesis_abs_fintech
 
 This project is the design implementation part of the essay which for apply Master degree of ZJU （浙江大学）  
 Essay name 基于国内市场资产证券化风险事件分析与区块链应用的金融科技设计
