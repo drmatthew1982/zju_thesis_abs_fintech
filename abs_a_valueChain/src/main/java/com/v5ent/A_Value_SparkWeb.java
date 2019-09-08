@@ -7,7 +7,8 @@ import net.matthew.Static_Value;
 
 /**
  * 
- * @author ZJU 基于国内市场资产证券化风险事件分析与区块链应用的金融科技设计
+ * @author ZJU 导师：罗 德明 作者：朱 逸清
+ * @see 基于国内市场资产证券化风险事件分析与区块链应用的金融科技设计
  * 
  *
  */
