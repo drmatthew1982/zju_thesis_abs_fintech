@@ -10,7 +10,6 @@
 目前仅仅可以在localhost域名下工作  
 警告：为了模拟论文中的场景，当相关的应用重启时，数据会丢失。所以重启后无法恢复数据     
 区块链部分，参考了 https://github.com/Mignet/blockchain 的代码并做了对应修改以符合论文需要。  
-隐名期间，如评阅老师们有任何问题，请通过学校联系我，谢谢。
 
 This source code just to implement the design of the Essay:   
 “The Design and Appliance of Blockchain and Fintech in Risk Prevention of ABS Investment“   
@@ -18,8 +17,7 @@ This source code just to implement the design of the Essay:
 For the propose solving the problems which mentioned in essay. So it not follow the software engining rule in fully strict way, such as naming space,reusage pattern or avoid hard code.  
 And now it's only work for the localhost.   
 Warning: the data will lost after the applications restart because it's need simulated some senario in the essay. So do not expacted the data will be restore after restart.   
-The blockchain base part is refer to https://github.com/Mignet/blockchain and I do some changing on the code.  
-Dear reviewers, You can contact me via school if need some discussion.    
+The blockchain base part is refer to https://github.com/Mignet/blockchain and I do some changing on the code.    
 
 ## 代码的使用 Usage:
 
