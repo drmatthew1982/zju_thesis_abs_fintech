@@ -3,7 +3,8 @@
 ## 声明 Statement：
 
 这个项目的源码仅适用于申请浙江大学同等学历硕士论文    
-论文名称：基于国内市场资产证券化风险事件分析与区块链应用的金融科技设计      
+论文名称：区块链及金融科技在资产证券化投资风险防范中的设计和应用. 
+（原名：基于国内市场资产证券化风险事件分析与区块链应用的金融科技设计，按答辩时评委会的要求作出了修改）      
 导师：浙江大学罗德明教授，作者：朱逸清  
 由于代码主要为了解决论文中提及的问题，本项目的源码没有100%的严格的遵照软件工程的规则，比如命名、重用、和硬编码避规等  
 目前仅仅可以在localhost域名下工作  
@@ -12,7 +13,8 @@
 隐名期间，如评阅老师们有任何问题，请通过学校联系我，谢谢。
 
 This source code just to implement the design of the Essay:   
-"Fintech Design based on China Market’s ABS Risk Cases Analysis and Blockchain’s Application".     
+“The Design and Appliance of Blockchain and Fintech in Risk Prevention of ABS Investment“   
+（Previous title is "Fintech Design based on China Market’s ABS Risk Cases Analysis and Blockchain’s Application"，be asked to change in defense）.      
 For the propose solving the problems which mentioned in essay. So it not follow the software engining rule in fully strict way, such as naming space,reusage pattern or avoid hard code.  
 And now it's only work for the localhost.   
 Warning: the data will lost after the applications restart because it's need simulated some senario in the essay. So do not expacted the data will be restore after restart.   
